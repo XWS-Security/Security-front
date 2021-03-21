@@ -1,18 +1,29 @@
 <template>
   <div id="app">
-    <img alt="Security img." src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <NavBar>
+      <NavGroup side='mr-auto'>
+        <CreateCertificateLink></CreateCertificateLink>
+      </NavGroup>
+    </NavBar>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/Home.vue'
+import NavBar from './components/NavBar/NavBar.vue'
+import CreateCertificateLink from "@/components/NavBar/CreateCertificateLink";
+import NavGroup from "@/components/NavBar/NavGroup";
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    CreateCertificateLink,
+    NavBar,
+    NavGroup
+  },
+  mounted() {
+
+  },
 }
 </script>
 
@@ -23,6 +34,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
