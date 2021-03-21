@@ -3,6 +3,7 @@
     <NavBar>
       <NavGroup side='mr-auto'>
         <CreateCertificateLink></CreateCertificateLink>
+        <ViewCertificatesLink></ViewCertificatesLink>
       </NavGroup>
     </NavBar>
     <router-view></router-view>
@@ -12,12 +13,14 @@
 <script>
 import NavBar from './components/NavBar/NavBar.vue'
 import CreateCertificateLink from "@/components/NavBar/CreateCertificateLink";
+import ViewCertificatesLink from "./components/NavBar/ViewCertificatesLink";
 import NavGroup from "@/components/NavBar/NavGroup";
 
 export default {
   name: 'App',
   components: {
     CreateCertificateLink,
+    ViewCertificatesLink,
     NavBar,
     NavGroup
   },
