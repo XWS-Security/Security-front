@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import CreateCertificate from "@/components/CreateCertificate/CreateCertificate";
 import Home from "@/components/Home";
+import ViewCertificates from "@/components/ViewCertificates/ViewCertificates";
 
 Vue.config.productionTip = false
 
@@ -19,6 +20,7 @@ Vue.prototype.$http = axios;
 const routes = [
     {path: '/home', component: Home},
     {path: '/createCertificate', component: CreateCertificate},
+    {path: '/viewCertificates', component: ViewCertificates}
 ];
 
 const router = new VueRouter({
