@@ -1,38 +1,40 @@
 <template>
-  <div v-if="selected === 'EndEntity' || selected === 'Intermediate'">
-    <table class="table">
-      <thead>
-      <tr>
-        <th scope="col">Name</th>
-        <th scope="col">Valid from</th>
-        <th scope="col">Valid to</th>
-        <th scope="col">Issuer</th>
-        <th scope="col">Type</th>
-        <th scope="col">Revoked</th>
-      </tr>
-      </thead>
-      <tbody v-for="(certificate, index) in CAcertificates" :key="index">
-      <td>{{ certificate.certificateName }}</td>
-      <td>{{ convertDate(certificate.startDate) }}</td>
-      <td>{{ convertDate(certificate.endDate) }}</td>
-      <td>{{ certificate.parentName }}</td>
-      <td>{{ certificate.ca }}</td>
-      <td>{{ certificate.revoked }}</td>
-      <td>
-        <button @click="chooseParentCertificate(certificate.certificateName)" :value="certificate.certificateName"
-                type="button"
-                class="btn btn-success">
-          Revoke
-        </button>
-      </td>
-      </tbody>
-    </table>
+  <div>
+    <b-jumbotron>
+      <table class="table">
+        <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Valid from</th>
+          <th scope="col">Valid to</th>
+          <th scope="col">Issuer</th>
+          <th scope="col">Type</th>
+          <th scope="col">Revoked</th>
+        </tr>
+        </thead>
+        <tbody v-for="(certificate, index) in certificates" :key="index">
+        <td>{{ certificate.certificateName }}</td>
+        <td>{{ convertDate(certificate.startDate) }}</td>
+        <td>{{ convertDate(certificate.endDate) }}</td>
+        <td>{{ certificate.parentName }}</td>
+        <td>{{ certificate.ca }}</td>
+        <td>{{ certificate.revoked }}</td>
+        <td>
+          <button @click="revokeCertificate(certificate.certificateName)" :value="certificate.certificateName"
+                  type="button"
+                  class="btn btn-danger">
+            Revoke
+          </button>
+        </td>
+        </tbody>
+      </table>
+    </b-jumbotron>
   </div>
 </template>
 
 <script>
 export default {
-name: "ViewCertificates",
+  name: "ViewCertificates",
   data() {
     return {
       selected: '',
@@ -54,9 +56,14 @@ name: "ViewCertificates",
           })
     },
 
-    revokeCertificate() {
-      this.$http.post('http://localhost:8080/certificate/revokeCertificate', {
-        'certificateName': this.certificateName,
+    convertDate(data) {
+      var ConvDate = new Date(data);
+      return ConvDate.getDate() + "/" + ConvDate.getMonth() + "/" + ConvDate.getFullYear();
+    },
+
+    revokeCertificate(certificateName) {
+      this.$http.post('http://localhost:8080/certificate/revoke', {
+        'certificateName': certificateName,
       }).then(response => {
         console.log(response.data);
         this.init();
