@@ -25,7 +25,7 @@ export default {
     NavGroup
   },
   mounted() {
-
+    this.$router.push({path: '/home'});
   },
 }
 </script>

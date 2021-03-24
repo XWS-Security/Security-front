@@ -37,6 +37,8 @@
               <th scope="col">Valid to</th>
               <th scope="col">Issuer</th>
               <th scope="col">Type</th>
+              <th scope="col">Revoked</th>
+              <th scope="col">Valid</th>
             </tr>
             </thead>
             <tbody v-for="(certificate, index) in CAcertificates" :key="index">
@@ -45,6 +47,8 @@
             <td>{{ convertDate(certificate.endDate) }}</td>
             <td>{{ certificate.parentName }}</td>
             <td>{{ certificate.ca }}</td>
+            <td>{{ certificate.revoked }}</td>
+            <td>{{ certificate.valid }}</td>
             <td>
               <button @click="chooseParentCertificate(certificate.certificateName)" :value="certificate.certificateName"
                       type="button"
@@ -56,6 +60,7 @@
           </table>
         </div>
         <div class="mt-3">Certificate type: <strong>{{ selected }}</strong></div>
+        <div class="mt-3">Parent: <strong>{{ parentName }}</strong></div>
       </div>
       <button type="submit" @click="createCertificate" class="btn btn-primary">Submit</button>
     </b-jumbotron>

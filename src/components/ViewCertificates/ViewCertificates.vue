@@ -10,6 +10,7 @@
           <th scope="col">Issuer</th>
           <th scope="col">Type</th>
           <th scope="col">Revoked</th>
+          <th scope="col">Valid</th>
         </tr>
         </thead>
         <tbody v-for="(certificate, index) in certificates" :key="index">
@@ -19,7 +20,8 @@
         <td>{{ certificate.parentName }}</td>
         <td>{{ certificate.ca }}</td>
         <td>{{ certificate.revoked }}</td>
-        <td>
+        <td>{{ certificate.valid }}</td>
+        <td v-if="certificate.revoked === false">
           <button @click="revokeCertificate(certificate.certificateName)" :value="certificate.certificateName"
                   type="button"
                   class="btn btn-danger">
