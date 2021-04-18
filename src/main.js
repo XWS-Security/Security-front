@@ -9,6 +9,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import CreateCertificate from "@/components/CreateCertificate/CreateCertificate";
 import Home from "@/components/Home";
 import ViewCertificates from "@/components/ViewCertificates/ViewCertificates";
+import Registration from "@/components/User/Registration/Registration";
+import Login from "@/components/User/Login/Login";
 
 Vue.config.productionTip = false
 
@@ -20,7 +22,9 @@ Vue.prototype.$http = axios;
 const routes = [
     {path: '/home', component: Home},
     {path: '/createCertificate', component: CreateCertificate},
-    {path: '/viewCertificates', component: ViewCertificates}
+    {path: '/viewCertificates', component: ViewCertificates},
+    {path: '/userRegistration', component: Registration},
+    {path: '/userLogin', component: Login}
 ];
 
 const router = new VueRouter({
