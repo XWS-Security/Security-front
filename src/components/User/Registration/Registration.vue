@@ -48,14 +48,16 @@ export default {
 
       this.errorMessage = '';
 
-      let user = {email: this.email, password: this.password, passwordVerification: this.passwordVerification}
+      let user = {email: this.email, password: this.password, repeatedPassword: this.passwordVerification}
       this.$http
-          .post('http://localhost:8080/users/register', user)
+          .post('http://localhost:8080/register/', user)
           .then(response => {
             response.data
             console.log("Registration completed")
             // TODO: redirect somewhere
-          })
+          }).catch(err => {
+        alert(err.response.data)
+      });
     }
   },
   computed: {

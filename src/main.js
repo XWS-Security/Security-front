@@ -11,6 +11,9 @@ import Home from "@/components/Home";
 import ViewCertificates from "@/components/ViewCertificates/ViewCertificates";
 import Registration from "@/components/User/Registration/Registration";
 import Login from "@/components/User/Login/Login";
+import ActivationSucceeded from "@/components/User/Registration/ActivationSucceeded";
+import ActivationFailed from "@/components/User/Registration/ActivationFailed";
+import Activation from "@/components/User/Registration/Activation";
 
 Vue.config.productionTip = false
 
@@ -24,7 +27,10 @@ const routes = [
     {path: '/createCertificate', component: CreateCertificate},
     {path: '/viewCertificates', component: ViewCertificates},
     {path: '/userRegistration', component: Registration},
-    {path: '/userLogin', component: Login}
+    {path: '/login', component: Login},
+    {path: '/activation/success', component: ActivationSucceeded},
+    {path: '/activation/failed', component: ActivationFailed},
+    {path: '/activation', component: Activation}
 ];
 
 const router = new VueRouter({
