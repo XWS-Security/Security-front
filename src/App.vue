@@ -5,6 +5,7 @@
         <CreateCertificateLink></CreateCertificateLink>
         <ViewCertificatesLink></ViewCertificatesLink>
         <RegistrationLink></RegistrationLink>
+        <LoginLink></LoginLink>
       </NavGroup>
     </NavBar>
     <router-view></router-view>
@@ -17,10 +18,12 @@ import CreateCertificateLink from "@/components/NavBar/CreateCertificateLink";
 import ViewCertificatesLink from "./components/NavBar/ViewCertificatesLink";
 import NavGroup from "@/components/NavBar/NavGroup";
 import RegistrationLink from "@/components/NavBar/RegistrationLink";
+import LoginLink from "@/components/NavBar/LoginLink";
 
 export default {
   name: 'App',
   components: {
+    LoginLink,
     RegistrationLink,
     CreateCertificateLink,
     ViewCertificatesLink,
