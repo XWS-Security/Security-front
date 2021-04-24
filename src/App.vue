@@ -8,6 +8,7 @@
         <LoginLink></LoginLink>
       </NavGroup>
     </NavBar>
+    <h3>{{ user }}</h3>
     <router-view></router-view>
   </div>
 </template>
@@ -30,9 +31,22 @@ export default {
     NavBar,
     NavGroup
   },
-  mounted() {
-    this.$router.push({path: '/home'});
+  created() {
+    this.$store.dispatch('startSession', null);
+    this.$http.defaults.headers.common['Authorization'] = this.$store.getters.tokenString;
   },
+  watch: {
+    $route() {
+      this.$http.defaults.headers.common['Authorization'] = this.$store.getters.tokenString;
+    }
+  },
+  computed: {
+    user() {
+      let user = this.$store.state.userType;
+      return user;
+    },
+  }
+  ,
 }
 </script>
 
