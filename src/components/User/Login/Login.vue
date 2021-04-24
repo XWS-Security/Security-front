@@ -29,19 +29,29 @@ export default {
         this.errorMessage = 'All fields must be filled!';
         return;
       }
-
+      let store = this.$store;
       this.errorMessage = '';
 
       let user = {email: this.email, password: this.password}
       this.$http
           .post('http://localhost:8080/login/', user)
           .then(response => {
-            response.data
-            console.log("Login completed")
-            // TODO: redirect somewhere
+            response.data;
+            store.dispatch('startSession', response.data);
+            this.dispatch(response.data.userType);
           }).catch(err => {
         alert(err.response.data)
       });
+    },
+    dispatch(type) {
+      let router = this.$router;
+      if (type === 'InstagramUser') {
+        router.push('/instagram');
+        return
+      } else {
+        router.push('/admin');
+        return
+      }
     }
   },
   computed: {
