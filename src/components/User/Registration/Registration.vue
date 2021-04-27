@@ -10,7 +10,7 @@
         <input type="password" class="form-control" id="passwordInput" placeholder="Password" v-model="password">
       </div>
       <div class="form-group">
-        <label for="passwordVerification">Password</label>
+        <label for="passwordVerification">Confirm password</label>
         <input type="password" class="form-control" id="passwordVerification"
                placeholder="Please reenter your password"
                v-model="passwordVerification">
@@ -42,7 +42,7 @@ export default {
       }
 
       if (!this.IsPasswordSafe) {
-        this.errorMessage = 'Password must contain at least 8 characters, a lowercase, an uppercase, a number and one special sign';
+        this.errorMessage = 'Password must contain at least 10 characters, a lowercase, an uppercase, a number and one special sign';
         return;
       }
 
