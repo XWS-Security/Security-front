@@ -9,6 +9,12 @@
         <label for="passwordInput">Password</label>
         <input type="password" class="form-control" id="passwordInput" placeholder="Password" v-model="password">
       </div>
+      <div class="form-group" v-if="!AreInputsValid || !IsEmailValid">
+        <p>{{ errorMessage }}</p>
+      </div>
+      <div class="form-group">
+        <a class="btn-link" v-on:click="onResetPassword()">Forgot password?</a>
+      </div>
       <button type="submit" class="btn btn-primary btn-block" v-on:click="onSubmit()">Submit</button>
     </b-jumbotron>
   </div>
@@ -20,7 +26,8 @@ export default {
   data: function () {
     return {
       email: null,
-      password: null
+      password: null,
+      errorMessage: ''
     }
   },
   methods: {
@@ -52,11 +59,22 @@ export default {
         router.push('/admin');
         return
       }
+    },
+    onResetPassword() {
+      if (!this.IsEmailValid) {
+        this.errorMessage = 'Email must be entered!';
+        return;
+      }
+      this.errorMessage = '';
+      this.$router.push('passwordReset/' + this.email)
     }
   },
   computed: {
     AreInputsValid() {
-      return this.email !== '' && this.password !== '';
+      return this.email !== null && this.password !== null && this.email !== '' && this.password !== '';
+    },
+    IsEmailValid() {
+      return this.email !== null && this.email !== '';
     }
   }
 }
