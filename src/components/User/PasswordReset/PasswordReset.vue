@@ -84,7 +84,8 @@ export default {
   },
   computed: {
     AreInputsValid() {
-      return this.password !== null && this.passwordRepeated !== null && this.password !== '' && this.passwordRepeated !== '';
+      return this.email !== null && this.password !== null && this.passwordRepeated !== null && this.code !== null
+          && this.password !== '' && this.passwordRepeated !== '' && this.code !== '';
     },
     DoPasswordsMatch() {
       return this.password === this.passwordRepeated;
@@ -96,7 +97,9 @@ export default {
       let hasLowercase = /[a-z]/.test(this.password);
       let hasUppercase = /[A-Z]/.test(this.password);
       let hasSpecial = /[!@#$%^&*)(+=._-]/.test(this.password);
-      return hasMinimumLength && hasNumber && hasLowercase && hasUppercase && hasSpecial;
+      let hasForbiddenChar = /[<>]/.test(this.password) || /[<>]/.test(this.passwordRepeated) || /[<>]/.test(this.code)
+          || /[<>]/.test(this.email);
+      return hasMinimumLength && hasNumber && hasLowercase && hasUppercase && hasSpecial && !hasForbiddenChar;
     }
   }
 }
