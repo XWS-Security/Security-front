@@ -61,7 +61,6 @@ export default {
       this.$http
           .post('http://localhost:8080/register/password/change', data)
           .then(response => {
-            // TODO: change token state
             store.dispatch('startSession', response.data);
             this.dispatch(response.data.userType);
           }).catch(err => {
@@ -95,7 +94,8 @@ export default {
       let hasLowercase = /[a-z]/.test(this.password);
       let hasUppercase = /[A-Z]/.test(this.password);
       let hasSpecial = /[!@#$%^&*)(+=._-]/.test(this.password);
-      return hasMinimumLength && hasNumber && hasLowercase && hasUppercase && hasSpecial;
+      let hasForbiddenChar = /[<>]/.test(this.password) || /[<>]/.test(this.passwordRepeated) || /[<>]/.test(this.oldPassword);
+      return hasMinimumLength && hasNumber && hasLowercase && hasUppercase && hasSpecial && !hasForbiddenChar;
     }
   }
 }
