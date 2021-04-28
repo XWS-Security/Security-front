@@ -52,6 +52,7 @@ export default {
         return;
       }
 
+      let store = this.$store;
       let data = {
         newPassword: this.password,
         newPasswordRepeated: this.passwordRepeated,
@@ -60,12 +61,23 @@ export default {
       this.$http
           .post('http://localhost:8080/register/password/change', data)
           .then(response => {
-            response.data
-            console.log("Password changed!")
-            // TODO: log out and require log in
+            // TODO: change token state
+            store.dispatch('startSession', response.data);
+            this.dispatch(response.data.userType);
           }).catch(err => {
-        alert(err.response.data)
+        err.data
+        alert("Password change failed. Please make sure the password provided is correct and that the new password is typed correctly both times and has 10 characters, a lowercase, an uppercase, a number and a special sign.")
       });
+    },
+    dispatch(type) {
+      let router = this.$router;
+      if (type === 'InstagramUser') {
+        router.push('/instagram');
+        return
+      } else {
+        router.push('/admin');
+        return
+      }
     }
   },
   computed: {

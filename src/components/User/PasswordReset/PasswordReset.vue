@@ -63,6 +63,7 @@ export default {
 
       this.errorMessage = ''
 
+      let router = this.$router;
       let data = {
         email: this.$route.params.email,
         newPassword: this.password,
@@ -73,6 +74,8 @@ export default {
           .post('http://localhost:8080/register/password/reset', data)
           .then(response => {
             response.data
+            alert("Password changed successfully! Proceed to log in!")
+            router.push('/login');
             console.log("Password changed!")
           }).catch(err => {
         alert(err.response.data)
