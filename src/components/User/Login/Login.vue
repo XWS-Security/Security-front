@@ -47,7 +47,8 @@ export default {
             store.dispatch('startSession', response.data);
             this.dispatch(response.data.userType);
           }).catch(err => {
-        alert(err.response.data)
+        console.log(err)
+        alert("Login failed")
       });
     },
     dispatch(type) {

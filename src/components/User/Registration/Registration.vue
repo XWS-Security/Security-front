@@ -2,6 +2,14 @@
   <div>
     <b-jumbotron>
       <div class="form-group">
+        <label for="nameInput">Email address</label>
+        <input type="text" class="form-control" id="nameInput" placeholder="Enter name" v-model="name">
+      </div>
+      <div class="form-group">
+        <label for="surnameInput">Email address</label>
+        <input type="text" class="form-control" id="surnameInput" placeholder="Enter surname" v-model="surname">
+      </div>
+      <div class="form-group">
         <label for="emailInput">Email address</label>
         <input type="email" class="form-control" id="emailInput" placeholder="Enter email" v-model="email">
       </div>
@@ -31,7 +39,9 @@ export default {
       email: null,
       password: null,
       passwordVerification: null,
-      errorMessage: ''
+      errorMessage: '',
+      name: null,
+      surname: null
     }
   },
   methods: {
@@ -48,13 +58,12 @@ export default {
 
       this.errorMessage = '';
 
-      let user = {email: this.email, password: this.password, repeatedPassword: this.passwordVerification}
+      let user = {email: this.email, password: this.password, repeatedPassword: this.passwordVerification, name: this.name, surname: this.surname}
       this.$http
           .post('http://localhost:8080/register/', user)
           .then(response => {
             response.data
-            console.log("Registration completed")
-            // TODO: redirect somewhere
+            alert("Activation link is sent to your email address.")
           }).catch(err => {
         alert(err.response.data)
       });
@@ -62,7 +71,7 @@ export default {
   },
   computed: {
     AreInputsValid() {
-      return this.email !== '' && this.password !== '' && this.passwordVerification !== '' && this.password === this.passwordVerification;
+      return this.email !== '' && this.password !== '' && this.name !== '' && this.surname !== '' && this.passwordVerification !== '' && this.password === this.passwordVerification;
     },
     IsPasswordSafe() {
       if (this.password === null) return false;
