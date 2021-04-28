@@ -43,7 +43,6 @@ export default {
       this.$http
           .post('http://localhost:8080/login/', user)
           .then(response => {
-            response.data;
             store.dispatch('startSession', response.data);
             this.dispatch(response.data.userType);
           }).catch(err => {

@@ -7,6 +7,7 @@
         <RegistrationLink v-if="user == null"></RegistrationLink>
         <LoginLink v-if="user == null"></LoginLink>
         <LogOutLink v-if="user !== null"></LogOutLink>
+        <ChangePasswordLink v-if="user !== null"></ChangePasswordLink>
         <TestLink></TestLink>
       </NavGroup>
     </NavBar>
@@ -24,10 +25,12 @@ import RegistrationLink from "@/components/NavBar/RegistrationLink";
 import LoginLink from "@/components/NavBar/LoginLink";
 import LogOutLink from "@/components/NavBar/LogOutLink";
 import TestLink from "@/components/NavBar/TestLink";
+import ChangePasswordLink from "@/components/NavBar/ChangePasswordLink";
 
 export default {
   name: 'App',
   components: {
+    ChangePasswordLink,
     TestLink,
     LogOutLink,
     LoginLink,

@@ -47,7 +47,7 @@ export default {
   methods: {
     onSubmit() {
       if (!this.AreInputsValid) {
-        this.errorMessage = 'All fields must be filled!';
+        this.errorMessage = 'All fields must be filled and passwords must match!';
         return;
       }
 
