@@ -52,11 +52,17 @@ export default {
       }
 
       if (!this.IsPasswordSafe) {
-        this.errorMessage = 'Password must contain at least 10 characters, a lowercase, an uppercase, a number and one special sign';
+        this.errorMessage = 'Password must contain at least 10 characters, a lowercase, an uppercase, a number and one special sign. Password can not contain less/greater than signs.';
         return;
       }
 
       this.errorMessage = '';
+
+      if (/[<>]/.test(this.email) || /[<>]/.test(this.name) || /[<>]/.test(this.surname)) {
+        this.errorMessage = 'Fields can not contain less/greater than signs.';
+        alert(this.errorMessage);
+        return;
+      }
 
       let user = {email: this.email, password: this.password, repeatedPassword: this.passwordVerification, name: this.name, surname: this.surname}
       this.$http
@@ -80,7 +86,8 @@ export default {
       let hasLowercase = /[a-z]/.test(this.password);
       let hasUppercase = /[A-Z]/.test(this.password);
       let hasSpecial = /[!@#$%^&*)(+=._-]/.test(this.password);
-      return hasMinimumLength && hasNumber && hasLowercase && hasUppercase && hasSpecial;
+      let hasForbiddenChar = /[<>]/.test(this.password);
+      return hasMinimumLength && hasNumber && hasLowercase && hasUppercase && hasSpecial && !hasForbiddenChar;
     }
   }
 }
