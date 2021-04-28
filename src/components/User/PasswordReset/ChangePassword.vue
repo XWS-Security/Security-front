@@ -2,6 +2,11 @@
   <div>
     <b-jumbotron>
       <div class="form-group">
+        <label for="oldPasswordInput">New password</label>
+        <input type="password" class="form-control" id="oldPasswordInput" placeholder="Old password"
+               v-model="oldPassword">
+      </div>
+      <div class="form-group">
         <label for="passwordInput">New password</label>
         <input type="password" class="form-control" id="passwordInput" placeholder="New password" v-model="password">
       </div>
@@ -9,10 +14,6 @@
         <label for="passwordVerificationInput">Confirm new password</label>
         <input type="password" class="form-control" id="passwordVerificationInput" placeholder="Reenter new password"
                v-model="passwordRepeated">
-      </div>
-      <div class="form-group">
-        <label for="passwordResetCode">Please enter the code you received in an email</label>
-        <input type="text" class="form-control" id="passwordResetCode" placeholder="Code" v-model="code">
       </div>
       <div class="form-group" v-if="!AreInputsValid || !IsPasswordSafe || !DoPasswordsMatch">
         <p>{{ errorMessage }}</p>
@@ -24,28 +25,18 @@
 
 <script>
 export default {
-  name: "PasswordReset",
+  name: "ChangePassword",
   data: function () {
     return {
+      oldPassword: null,
       password: null,
       passwordRepeated: null,
-      code: null,
       errorMessage: ''
     }
   },
-  mounted() {
-    let email = {email: this.$route.params.email}
-    this.$http
-        .post('http://localhost:8080/register/password/triggerReset', email)
-        .then(response => {
-          response.data
-          console.log("Password reset request sent!")
-        }).catch(err => {
-      alert(err.response.data)
-    });
-  },
   methods: {
     onSubmit() {
+      // TODO: validate all
       if (!this.AreInputsValid) {
         this.errorMessage = 'All fields must be filled!';
         return;
@@ -61,19 +52,17 @@ export default {
         return;
       }
 
-      this.errorMessage = ''
-
       let data = {
-        email: this.$route.params.email,
         newPassword: this.password,
         newPasswordRepeated: this.passwordRepeated,
-        code: this.code
+        oldPassword: this.oldPassword
       }
       this.$http
-          .post('http://localhost:8080/register/password/reset', data)
+          .post('http://localhost:8080/register/password/change', data)
           .then(response => {
             response.data
             console.log("Password changed!")
+            // TODO: log out and require log in
           }).catch(err => {
         alert(err.response.data)
       });
@@ -81,7 +70,8 @@ export default {
   },
   computed: {
     AreInputsValid() {
-      return this.password !== null && this.passwordRepeated !== null && this.password !== '' && this.passwordRepeated !== '';
+      return this.oldPassword !== null && this.password !== null && this.passwordRepeated !== null
+          && this.oldPassword !== '' && this.password !== '' && this.passwordRepeated !== '';
     },
     DoPasswordsMatch() {
       return this.password === this.passwordRepeated;

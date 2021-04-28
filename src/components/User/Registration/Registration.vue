@@ -2,11 +2,11 @@
   <div>
     <b-jumbotron>
       <div class="form-group">
-        <label for="nameInput">Email address</label>
+        <label for="nameInput">Name</label>
         <input type="text" class="form-control" id="nameInput" placeholder="Enter name" v-model="name">
       </div>
       <div class="form-group">
-        <label for="surnameInput">Email address</label>
+        <label for="surnameInput">Surname</label>
         <input type="text" class="form-control" id="surnameInput" placeholder="Enter surname" v-model="surname">
       </div>
       <div class="form-group">
