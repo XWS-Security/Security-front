@@ -97,6 +97,12 @@ export default {
     },
 
     init() {
+
+      if (this.$store.state.userType !== 'Administrator') {
+        this.$router.push("/")
+        return
+      }
+
       this.$http
           .get('http://localhost:8080/certificate/getCA')
           .then(response => {

@@ -2,10 +2,12 @@
   <div id="app">
     <NavBar>
       <NavGroup side='mr-auto'>
-        <CreateCertificateLink></CreateCertificateLink>
-        <ViewCertificatesLink></ViewCertificatesLink>
-        <RegistrationLink></RegistrationLink>
-        <LoginLink></LoginLink>
+        <CreateCertificateLink v-if="user === 'Administrator'"></CreateCertificateLink>
+        <ViewCertificatesLink v-if="user === 'Administrator'"></ViewCertificatesLink>
+        <RegistrationLink v-if="user == null"></RegistrationLink>
+        <LoginLink v-if="user == null"></LoginLink>
+        <LogOutLink v-if="user !== null"></LogOutLink>
+        <TestLink></TestLink>
       </NavGroup>
     </NavBar>
     <h3>{{ user }}</h3>
@@ -20,10 +22,14 @@ import ViewCertificatesLink from "./components/NavBar/ViewCertificatesLink";
 import NavGroup from "@/components/NavBar/NavGroup";
 import RegistrationLink from "@/components/NavBar/RegistrationLink";
 import LoginLink from "@/components/NavBar/LoginLink";
+import LogOutLink from "@/components/NavBar/LogOutLink";
+import TestLink from "@/components/NavBar/TestLink";
 
 export default {
   name: 'App',
   components: {
+    TestLink,
+    LogOutLink,
     LoginLink,
     RegistrationLink,
     CreateCertificateLink,
