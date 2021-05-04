@@ -64,9 +64,15 @@ export default {
         return;
       }
 
-      let user = {email: this.email, password: this.password, repeatedPassword: this.passwordVerification, name: this.name, surname: this.surname}
+      let user = {
+        email: this.email,
+        password: this.password,
+        repeatedPassword: this.passwordVerification,
+        name: this.name,
+        surname: this.surname
+      }
       this.$http
-          .post('http://localhost:8080/register/', user)
+          .post(process.env.VUE_APP_BACKEND_URL + 'register/', user)
           .then(response => {
             response.data
             alert("Activation link is sent to your email address.")

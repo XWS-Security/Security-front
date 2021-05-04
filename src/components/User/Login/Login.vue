@@ -41,7 +41,7 @@ export default {
 
       let user = {email: this.email, password: this.password}
       this.$http
-          .post('http://localhost:8080/login/', user)
+          .post(process.env.VUE_APP_BACKEND_URL + 'login/', user)
           .then(response => {
             store.dispatch('startSession', response.data);
             this.dispatch(response.data.userType);

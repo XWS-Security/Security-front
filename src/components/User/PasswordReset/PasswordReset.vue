@@ -36,7 +36,7 @@ export default {
   mounted() {
     let email = {email: this.$route.params.email}
     this.$http
-        .post('http://localhost:8080/register/password/triggerReset', email)
+        .post(process.env.VUE_APP_BACKEND_URL + 'register/password/triggerReset', email)
         .then(response => {
           response.data
           console.log("Password reset request sent!")
@@ -71,7 +71,7 @@ export default {
         code: this.code
       }
       this.$http
-          .post('http://localhost:8080/register/password/reset', data)
+          .post(process.env.VUE_APP_BACKEND_URL + 'register/password/reset', data)
           .then(response => {
             response.data
             alert("Password changed successfully! Proceed to log in!")

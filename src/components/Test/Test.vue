@@ -10,7 +10,7 @@ export default {
 
   mounted() {
     this.$http
-        .get('http://localhost:8080/test/')
+        .get(process.env.VUE_APP_BACKEND_URL + 'test/')
         .then(response => {
           response.data
           alert("Has authority!")
