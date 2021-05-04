@@ -104,14 +104,14 @@ export default {
       }
 
       this.$http
-          .get('http://localhost:8080/certificate/getCA')
+          .get(process.env.VUE_APP_BACKEND_URL + 'certificate/getCA')
           .then(response => {
             this.CAcertificates = response.data;
           })
     },
 
     createCertificate() {
-      this.$http.post('http://localhost:8080/certificate/createCertificate', {
+      this.$http.post(process.env.VUE_APP_BACKEND_URL + 'certificate/createCertificate', {
         'certificateName': this.certificateName,
         'startDate': this.validFrom,
         'endDate': this.validTo,

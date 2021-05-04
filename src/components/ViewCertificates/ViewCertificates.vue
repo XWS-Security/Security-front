@@ -58,7 +58,7 @@ export default {
       }
 
       this.$http
-          .get('http://localhost:8080/certificate/getAllCertificates')
+          .get(process.env.VUE_APP_BACKEND_URL + 'certificate/getAllCertificates')
           .then(response => {
             this.certificates = response.data;
           })
@@ -70,7 +70,7 @@ export default {
     },
 
     revokeCertificate(certificateName) {
-      this.$http.post('http://localhost:8080/certificate/revoke', {
+      this.$http.post(process.env.VUE_APP_BACKEND_URL + 'certificate/revoke', {
         'certificateName': certificateName,
       }).then(response => {
         console.log(response.data);

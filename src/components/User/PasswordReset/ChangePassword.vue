@@ -58,8 +58,9 @@ export default {
         newPasswordRepeated: this.passwordRepeated,
         oldPassword: this.oldPassword
       }
+
       this.$http
-          .post('http://localhost:8080/register/password/change', data)
+          .post(process.env.VUE_APP_BACKEND_URL + 'register/password/change', data)
           .then(response => {
             store.dispatch('startSession', response.data);
             this.dispatch(response.data.userType);
