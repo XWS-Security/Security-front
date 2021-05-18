@@ -2,6 +2,10 @@
   <div>
     <b-jumbotron>
       <div class="form-group">
+        <label for="usernameInput">Username</label>
+        <input type="text" class="form-control" id="usernameInput" placeholder="Enter username" v-model="username">
+      </div>
+      <div class="form-group">
         <label for="nameInput">Name</label>
         <input type="text" class="form-control" id="nameInput" placeholder="Enter name" v-model="name">
       </div>
@@ -26,6 +30,26 @@
       <div class="form-group" v-if="!AreInputsValid || !IsPasswordSafe">
         <p>{{ errorMessage }}</p>
       </div>
+      <div>
+        <input type="radio" id="male" value="Male" v-model="gender">
+        <label for="male">Male</label>
+        <br>
+        <input type="radio" id="female" value="Female" v-model="gender">
+        <label for="female">Female</label>
+        <br>
+      </div>
+      <div class="form-group">
+        <label for="phoneNumberInput">Phone number</label>
+        <input type="text" class="form-control" id="phoneNumberInput" placeholder="Enter phone number" v-model="phoneNumber">
+      </div>
+      <div class="form-group">
+        <label for="dateOfBirth">Date of birth</label>
+        <input type="date" v-model="dateOfBirth" class="form-control" id="DateOfBirth">
+      </div>
+      <div class="form-group">
+        <label for="about">About</label>
+        <textarea type="text" v-model="about" class="form-control" id="About"/>
+      </div>
       <button type="submit" class="btn btn-primary btn-block" v-on:click="onSubmit()">Submit</button>
     </b-jumbotron>
   </div>
@@ -41,7 +65,12 @@ export default {
       passwordVerification: null,
       errorMessage: '',
       name: null,
-      surname: null
+      surname: null,
+      username: null,
+      gender: null,
+      dateOfBirth: new Date(),
+      phoneNumber: null,
+      about: null
     }
   },
   methods: {
@@ -58,18 +87,23 @@ export default {
 
       this.errorMessage = '';
 
-      if (/[<>]/.test(this.email) || /[<>]/.test(this.name) || /[<>]/.test(this.surname)) {
+      if (/[<>]/.test(this.email) || /[<>]/.test(this.name) || /[<>]/.test(this.surname) || /[<>]/.test(this.username)) {
         this.errorMessage = 'Fields can not contain less/greater than signs.';
         alert(this.errorMessage);
         return;
       }
 
       let user = {
+        username: this.username,
         email: this.email,
         password: this.password,
         repeatedPassword: this.passwordVerification,
         name: this.name,
-        surname: this.surname
+        surname: this.surname,
+        dateOfBirth: this.dateOfBirth,
+        phoneNumber: this.phoneNumber,
+        about: this.about,
+        gender: this.gender
       }
       this.$http
           .post(process.env.VUE_APP_BACKEND_URL + 'register/', user)
@@ -83,7 +117,8 @@ export default {
   },
   computed: {
     AreInputsValid() {
-      return this.email !== '' && this.password !== '' && this.name !== '' && this.surname !== '' && this.passwordVerification !== '' && this.password === this.passwordVerification;
+      return this.email !== '' && this.password !== '' && this.name !== '' && this.surname !== '' && this.passwordVerification !== '' && this.password === this.passwordVerification
+          && this.username !== '' && this.dateOfBirth !== null && this.gender !== '';
     },
     IsPasswordSafe() {
       if (this.password === null) return false;
