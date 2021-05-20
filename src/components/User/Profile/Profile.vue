@@ -9,9 +9,10 @@
                 <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="Admin"
                      class="rounded-circle p-1 bg-primary" width="110">
                 <div class="mt-3">
-                  <h4>John Doe</h4>
-                  <p class="text-secondary mb-1">Full Stack Developer</p>
-                  <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
+                  <h4>{{ this.name + ' ' + this.surname }}</h4>
+                </div>
+                <div class="mt-3">
+                  <h4>{{ this.dateOfBirth }}</h4>
                 </div>
               </div>
             </div>
@@ -22,10 +23,18 @@
             <div class="card-body">
               <div class="row mb-3">
                 <div class="col-sm-3">
+                  <h6 class="mb-0">Username</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  <input type="text" class="form-control" v-model="username">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-3">
                   <h6 class="mb-0">Name</h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
-                  <input type="text" class="form-control" value="John Doe">
+                  <input type="text" class="form-control" v-model="name">
                 </div>
               </div>
               <div class="row mb-3">
@@ -33,7 +42,7 @@
                   <h6 class="mb-0">Surname</h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
-                  <input type="text" class="form-control" value="John Doe">
+                  <input type="text" class="form-control" v-model="surname">
                 </div>
               </div>
               <div class="row mb-3">
@@ -41,7 +50,7 @@
                   <h6 class="mb-0">Email</h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
-                  <input type="text" class="form-control" value="john@example.com">
+                  <input type="text" class="form-control" v-model="email">
                 </div>
               </div>
               <div class="row mb-3">
@@ -49,15 +58,7 @@
                   <h6 class="mb-0">Phone</h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
-                  <input type="text" class="form-control" value="(239) 816-9029">
-                </div>
-              </div>
-              <div class="row mb-3">
-                <div class="col-sm-3">
-                  <h6 class="mb-0">Address</h6>
-                </div>
-                <div class="col-sm-9 text-secondary">
-                  <input type="text" class="form-control" value="Bay Area, San Francisco, CA">
+                  <input type="text" class="form-control" v-model="phoneNumber">
                 </div>
               </div>
               <div class="row mb-3">
@@ -65,37 +66,21 @@
                   <h6 class="mb-0">About</h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
-                  <textarea type="text" class="form-control" value="John Doe"/>
-                </div>
-              </div>
-              <div class="row mb-3">
-                <div class="col-sm-3">
-                  <h6 class="mb-0">Password</h6>
-                </div>
-                <div class="col-sm-9 text-secondary">
-                  <input type="password" class="form-control" value="John Doe">
-                </div>
-              </div>
-              <div class="row mb-3">
-                <div class="col-sm-3">
-                  <h6 class="mb-0">New Password</h6>
-                </div>
-                <div class="col-sm-9 text-secondary">
-                  <input type="password" class="form-control" value="John Doe">
-                </div>
-              </div>
-              <div class="row mb-3">
-                <div class="col-sm-3">
-                  <h6 class="mb-0">Repeat new password</h6>
-                </div>
-                <div class="col-sm-9 text-secondary">
-                  <input type="password" class="form-control" value="John Doe">
+                  <textarea type="text" class="form-control" v-model="about"/>
                 </div>
               </div>
               <div class="row">
                 <div class="col-sm-3"></div>
                 <div class="col-sm-9 text-secondary">
-                  <input type="button" class="btn btn-primary px-4" value="Save Changes">
+                  <input type="button" class="btn btn-primary px-4" value="Update info" v-on:click="updateBasicInfo">
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-9 text-secondary">
+                  <input type="button" class="btn btn-primary px-4" value="Change password"
+                         v-on:click="changePassword">
                 </div>
               </div>
             </div>
@@ -113,7 +98,6 @@ export default {
     return {
       email: null,
       username: null,
-      password: null,
       newPassword: '',
       name: null,
       surname: null,
@@ -122,6 +106,76 @@ export default {
       about: null
     }
   },
+
+  mounted() {
+    this.getUserInfo();
+  },
+
+  methods: {
+    getUserInfo() {
+      this.$http
+          .get(process.env.VUE_APP_BACKEND_URL + 'profile/')
+          .then(response => {
+            this.email = response.data.email;
+            this.username = response.data.username;
+            this.name = response.data.name;
+            this.surname = response.data.surname;
+            this.dateOfBirth = this.convertDate(response.data.dateOfBirth);
+            this.about = response.data.about;
+            this.phoneNumber = response.data.phoneNumber;
+          }).catch(err => {
+        alert(err.response.data)
+      });
+    },
+
+    updateBasicInfo() {
+
+      if (!this.AreInputsValid) {
+        this.errorMessage = 'All fields must be filled and passwords must match!';
+        return;
+      }
+
+      let basicInfo = {
+        username: this.username,
+        email: this.email,
+        name: this.name,
+        surname: this.surname,
+        phoneNumber: this.phoneNumber,
+        about: this.about
+      }
+
+      if (/[<>]/.test(this.email) || /[<>]/.test(this.name) || /[<>]/.test(this.surname) || /[<>]/.test(this.username)) {
+        this.errorMessage = 'Fields can not contain less/greater than signs.';
+        alert(this.errorMessage);
+        return;
+      }
+
+      this.$http
+          .put(process.env.VUE_APP_BACKEND_URL + 'profile/', basicInfo)
+          .then(response => {
+            alert(response.data);
+          }).catch(err => {
+        alert(err.response.data)
+      });
+    },
+
+    changePassword() {
+      this.$router.push("/changePassword");
+    },
+
+    convertDate(data) {
+      var ConvDate = new Date(data);
+      console.log(ConvDate.getDate() + "/" + ConvDate.getMonth() + "/" + ConvDate.getFullYear());
+      return ConvDate.getDate() + "/" + ConvDate.getMonth() + "/" + ConvDate.getFullYear();
+    },
+  },
+
+  computed: {
+    AreInputsValid() {
+      return this.email !== '' && this.name !== '' && this.surname !== ''
+          && this.username !== '' && this.dateOfBirth !== null && this.gender !== '';
+    }
+  }
 }
 </script>
 
