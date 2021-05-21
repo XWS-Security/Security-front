@@ -19,6 +19,7 @@ import InstagramUserHome from "@/components/User/InstagramUserHome";
 import PasswordReset from "@/components/User/PasswordReset/PasswordReset";
 import ChangePassword from "@/components/User/PasswordReset/ChangePassword";
 import Profile from "@/components/User/Profile/Profile";
+import ProfileSearch from "@/components/User/Profile/ProfileSearch";
 
 Vue.config.productionTip = false
 
@@ -40,7 +41,8 @@ const routes = [
     {path: '/activation', component: Activation},
     {path: '/passwordReset/:email', component: PasswordReset},
     {path: '/changePassword/', component: ChangePassword},
-    {path: '/profile/', component: Profile}
+    {path: '/profile/', component: Profile},
+    {path: '/profileSearch/', component: ProfileSearch}
 ];
 
 const router = new VueRouter({
