@@ -114,7 +114,7 @@ export default {
   methods: {
     getUserInfo() {
       this.$http
-          .get(process.env.VUE_APP_BACKEND_URL + 'profile/')
+          .get(process.env.VUE_APP_BACKEND_URL + 'profile/getUserInfo')
           .then(response => {
             this.email = response.data.email;
             this.username = response.data.username;
@@ -151,7 +151,7 @@ export default {
       }
 
       this.$http
-          .put(process.env.VUE_APP_BACKEND_URL + 'profile/', basicInfo)
+          .put(process.env.VUE_APP_BACKEND_URL + 'profile/updateProfileInfo', basicInfo)
           .then(response => {
             alert(response.data);
           }).catch(err => {
