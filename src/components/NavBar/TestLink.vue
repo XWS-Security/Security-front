@@ -11,7 +11,7 @@ export default {
   methods: {
     test() {
       this.$http
-          .get(process.env.VUE_APP_BACKEND_URL + 'test/')
+          .get(process.env.VUE_APP_BACKEND_URL + 'followerMicroservice/hitMicroservice')
           .then(response => {
             response.data
             alert("Has authority!")
