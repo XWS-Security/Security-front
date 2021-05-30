@@ -20,6 +20,7 @@ import PasswordReset from "@/components/User/PasswordReset/PasswordReset";
 import ChangePassword from "@/components/User/PasswordReset/ChangePassword";
 import Profile from "@/components/User/Profile/Profile";
 import ProfileSearch from "@/components/User/Profile/ProfileSearch";
+import NistagramProfile from "@/components/Nistagram/Profile/NistagramProfile";
 
 Vue.config.productionTip = false
 
@@ -42,6 +43,7 @@ const routes = [
     {path: '/passwordReset/:email', component: PasswordReset},
     {path: '/changePassword/', component: ChangePassword},
     {path: '/profile/', component: Profile},
+    {path: '/nistagramprofile/', component: NistagramProfile},
     {path: '/profileSearch/', component: ProfileSearch}
 ];
 
