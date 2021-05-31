@@ -52,23 +52,26 @@ export default {
         return;
       }
 
-      let store = this.$store;
       let data = {
         newPassword: this.password,
         newPasswordRepeated: this.passwordRepeated,
         oldPassword: this.oldPassword
       }
+      let router = this.$router;
 
       this.$http
           .post(process.env.VUE_APP_BACKEND_URL + 'register/password/change', data)
           .then(response => {
-            store.dispatch('startSession', response.data);
-            this.dispatch(response.data.userType);
+            response.data
+            alert("Password changed successfully! Proceed to log in!")
+            this.$store.dispatch('logOut');
+            router.push('/login');
           }).catch(err => {
         err.data
         alert("Password change failed. Please make sure the password provided is correct and that the new password is typed correctly both times and has 10 characters, a lowercase, an uppercase, a number and a special sign.")
       });
     },
+
     dispatch(type) {
       let router = this.$router;
       if (type === 'InstagramUser') {
