@@ -1,5 +1,5 @@
 <template>
-  <img v-bind:src="image" v-on:click="redirectToStories" v-on:="getBase64"/>
+  <img v-bind:src="image" v-on:click="redirectToStories"/>
 </template>
 
 <script>
@@ -40,8 +40,8 @@ export default {
   img {
     border-color: #e2e8f0;
     border-radius: 50%;
-    width:50px;
-    height:50px;
-    margin: 10%;
+    width:100px;
+    height:100px;
+    margin: 3%;
   }
 </style>

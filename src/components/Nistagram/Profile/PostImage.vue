@@ -1,5 +1,5 @@
 <template>
-  <img v-bind:src="image" alt="Avatar"/>
+  <img v-bind:src="image"/>
 </template>
 
 <script>
@@ -8,21 +8,25 @@ import {_arrayBufferToBase64} from "@/components/GetImg";
 export default {
   name: "PostImage",
   mounted() {
-    this.getBase64();
+    this.getBase64(this.imageName);
   },
-  props: {
-    imageName: String
-  },
+  props: ['imageName', 'id'],
   data() {
     return {
       image: null
+    }
+  },
+  watch:{
+    imageName: function(newVal, oldVal) {
+      console.log('Prop changed: ', newVal, ' | was: ', oldVal)
+      this.getBase64(newVal);
     }
   },
   methods: {
     getBase64: function () {
 
       this.$http
-          .get(process.env.VUE_APP_CONTENT_URL  + 'getImg/' + this.imageName, {
+          .get(process.env.VUE_APP_CONTENT_URL  + 'image/' + this.imageName, {
             responseType: 'arraybuffer'
           })
           .then(response => {
@@ -34,5 +38,9 @@ export default {
 </script>
 
 <style scoped>
-
+img {
+  width:180px;
+  height:180px;
+  margin: 1%;
+}
 </style>
