@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import {_arrayBufferToBase64} from "@/components/GetImg";
+import {_arrayBufferToBase64} from "@/assets/js/GetImg";
 
 export default {
   name: "ProfilePicture",
