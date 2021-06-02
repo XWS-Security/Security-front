@@ -1,5 +1,6 @@
 <template>
   <img v-bind:src="image" v-on:click="redirectToStories"/>
+
 </template>
 
 <script>
@@ -27,7 +28,8 @@ export default {
             responseType: 'arraybuffer'
           })
           .then(response => {
-            this.image = _arrayBufferToBase64(response.data)
+            let type  = Object.values(response.headers)[1];
+            this.image = _arrayBufferToBase64(response.data, type)
           })
     },
     redirectToStories: function (){
