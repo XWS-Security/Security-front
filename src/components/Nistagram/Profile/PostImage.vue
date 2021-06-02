@@ -1,5 +1,8 @@
 <template>
-  <img v-bind:src="image"/>
+  <div class="item">
+    <img class="item" v-if="media.mediatype==='image/jpeg'" v-bind:src="media.url" v-on:click="openPost"/>
+    <video class="item" id="vid" v-else v-bind:src="media.url" autoplay loop muted v-on:click="openPost"/>
+  </div>
 </template>
 
 <script>
@@ -13,7 +16,7 @@ export default {
   props: ['imageName', 'id'],
   data() {
     return {
-      image: null
+      media: {mediatype:'', url:''}
     }
   },
   watch:{
@@ -30,17 +33,23 @@ export default {
             responseType: 'arraybuffer'
           })
           .then(response => {
-            this.image = _arrayBufferToBase64(response.data)
+            let type  = Object.values(response.headers)[1];
+            this.media.url = _arrayBufferToBase64(response.data, type)
+            this.media.mediatype = type;
           })
     },
+    openPost: function (){
+      this.$router.push("/post?id=" + this.id);
+    }
   }
 }
 </script>
 
 <style scoped>
-img {
+.item {
   width:180px;
   height:180px;
   margin: 1%;
 }
+
 </style>
