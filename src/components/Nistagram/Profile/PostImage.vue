@@ -6,14 +6,14 @@
 </template>
 
 <script>
-import {_arrayBufferToBase64} from "@/assets/js/GetImg";
+import {_arrayBufferToBase64} from "@/assets/js/HellperFunctions";
 
 export default {
   name: "PostImage",
   mounted() {
     this.getBase64(this.imageName);
   },
-  props: ['imageName', 'id'],
+  props: ['imageName', 'id', 'user', 'profileImg'],
   data() {
     return {
       media: {mediatype:'', url:''}
@@ -39,7 +39,7 @@ export default {
           })
     },
     openPost: function (){
-      this.$router.push("/post?id=" + this.id);
+      this.$router.push("/post?id=" + this.id + '&username=' + this.user + '&profileImg=' + this.profileImg);
     }
   }
 }

@@ -12,7 +12,11 @@
     </div>
     <hr>
     <div class="d-flex align-content-around  justify-content-center flex-wrap light_blue">
-      <post-image v-for="i in user.images" :key="i.imagePath" v-bind:imageName="i.imagePath" v-bind:id="i.postId" ></post-image>
+      <post-image v-for="i in user.images" :key="i.imagePath"
+                  v-bind:imageName="i.imagePath"
+                  v-bind:id="i.postId"
+                  v-bind:user="id"
+      v-bind:profile-img="user.profilePictureName"></post-image>
     </div>
   </div>
 </template>
