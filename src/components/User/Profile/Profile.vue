@@ -69,6 +69,14 @@
                   <textarea type="text" class="form-control" v-model="about"/>
                 </div>
               </div>
+              <div>
+                <input type="radio" id="private" value="true" v-model="profilePrivate">
+                <label for="private">Private</label>
+                <br>
+                <input type="radio" id="public" value="false" v-model="profilePrivate">
+                <label for="public">Public</label>
+                <br>
+              </div>
               <div class="row">
                 <div class="col-sm-3"></div>
                 <div class="col-sm-9 text-secondary">
@@ -103,7 +111,8 @@ export default {
       surname: null,
       dateOfBirth: new Date(),
       phoneNumber: null,
-      about: null
+      about: null,
+      profilePrivate: true
     }
   },
 
@@ -123,6 +132,7 @@ export default {
             this.dateOfBirth = this.convertDate(response.data.dateOfBirth);
             this.about = response.data.about;
             this.phoneNumber = response.data.phoneNumber;
+            this.profilePrivate = response.data.profilePrivate;
           }).catch(err => {
         alert(err.response.data)
       });
@@ -141,7 +151,8 @@ export default {
         name: this.name,
         surname: this.surname,
         phoneNumber: this.phoneNumber,
-        about: this.about
+        about: this.about,
+        profilePrivate: this.profilePrivate
       }
 
       if (/[<>]/.test(this.email) || /[<>]/.test(this.name) || /[<>]/.test(this.surname) || /[<>]/.test(this.username)) {
