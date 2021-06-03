@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import {_arrayBufferToBase64} from "@/assets/js/GetImg";
+import {_arrayBufferToBase64} from "@/assets/js/HellperFunctions";
 
 export default {
   name: "ProfilePicture",

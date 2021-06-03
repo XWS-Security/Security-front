@@ -5,20 +5,21 @@
         id="carousel-1"
         controls
         indicators
+        :interval=999999999
         background="#2e2e2e"
         img-height="180"
         style="text-shadow: 1px 1px 2px #333;">
       <b-carousel-slide v-for="(media, index) in images" v-bind:key="index" v-bind:img-src="media.url" img-blank
                         img-alt="Blank image">
         <img v-if="media.mediatype==='image/jpeg'" class="item" v-bind:src="media.url"/>
-        <video v-else class="item" v-bind:src="media.url" autoplay loop v-bind:muted="index!=selected" v-bind:id="index"/>
+        <video controls  v-else class="item" v-bind:src="media.url" autoplay loop v-bind:muted="index!=selected" v-bind:id="index"/>
       </b-carousel-slide>
     </b-carousel>
   </div>
 </template>
 
 <script>
-import {_arrayBufferToBase64} from "@/assets/js/GetImg";
+import {_arrayBufferToBase64} from "@/assets/js/HellperFunctions";
 
 export default {
   name: "SlideShow",
