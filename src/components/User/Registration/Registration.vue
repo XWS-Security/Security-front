@@ -40,7 +40,8 @@
       </div>
       <div class="form-group">
         <label for="phoneNumberInput">Phone number</label>
-        <input type="text" class="form-control" id="phoneNumberInput" placeholder="Enter phone number" v-model="phoneNumber">
+        <input type="text" class="form-control" id="phoneNumberInput" placeholder="Enter phone number"
+               v-model="phoneNumber">
       </div>
       <div class="form-group">
         <label for="dateOfBirth">Date of birth</label>
@@ -49,6 +50,14 @@
       <div class="form-group">
         <label for="about">About</label>
         <textarea type="text" v-model="about" class="form-control" id="About"/>
+      </div>
+      <div>
+        <input type="radio" id="private" value="true" v-model="profilePrivate">
+        <label for="private">Private</label>
+        <br>
+        <input type="radio" id="public" value="false" v-model="profilePrivate">
+        <label for="public">Public</label>
+        <br>
       </div>
       <button type="submit" class="btn btn-primary btn-block" v-on:click="onSubmit()">Submit</button>
     </b-jumbotron>
@@ -67,10 +76,11 @@ export default {
       name: null,
       surname: null,
       username: null,
-      gender: null,
+      gender: "Male",
       dateOfBirth: new Date(),
       phoneNumber: null,
-      about: null
+      about: null,
+      profilePrivate: true
     }
   },
   methods: {
@@ -103,7 +113,8 @@ export default {
         dateOfBirth: this.dateOfBirth,
         phoneNumber: this.phoneNumber,
         about: this.about,
-        gender: this.gender
+        gender: this.gender,
+        profilePrivate: this.profilePrivate
       }
       this.$http
           .post(process.env.VUE_APP_BACKEND_URL + 'register/', user)
