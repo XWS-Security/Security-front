@@ -4,19 +4,21 @@
       <profile-picture v-bind:imageName="user.profilePictureName"></profile-picture>
       <div>
         <br>
-        <h4>{{id}} <button class="btn btn-info">follow</button></h4>
+        <h4>{{ id }}
+          <button class="btn btn-info">follow</button>
+        </h4>
         {{ user.about }}<br>
-        <b>321</b> followers <b>121</b> following <b>{{numberOfPosts}}</b> posts
+        <b>321</b> followers <b>121</b> following <b>{{ numberOfPosts }}</b> posts
       </div>
 
     </div>
     <hr>
     <div class="d-flex align-content-around  justify-content-center flex-wrap light_blue">
-      <post-image v-for="i in user.images" :key="i.imagePath"
-                  v-bind:imageName="i.imagePath"
+      <post-image v-for="i in user.images" :key="i.imageName"
+                  v-bind:imageName="i.imageName"
                   v-bind:id="i.postId"
                   v-bind:user="id"
-      v-bind:profile-img="user.profilePictureName"></post-image>
+                  v-bind:profile-img="user.profilePictureName"></post-image>
     </div>
   </div>
 </template>
@@ -51,12 +53,11 @@ export default {
           })
     },
   },
-  computed:{
-    numberOfPosts:function (){
-      if(this.user.images === undefined){
+  computed: {
+    numberOfPosts: function () {
+      if (this.user.images === undefined) {
         return 0;
-      }
-      else {
+      } else {
         return this.user.images.length
       }
     }
@@ -65,7 +66,7 @@ export default {
 </script>
 
 <style scoped>
-  .light_blue{
-    background-color:#fdfffb
-  }
+.light_blue {
+  background-color: #fdfffb
+}
 </style>

@@ -12,7 +12,8 @@
       <b-carousel-slide v-for="(media, index) in images" v-bind:key="index" v-bind:img-src="media.url" img-blank
                         img-alt="Blank image">
         <img v-if="media.mediatype==='image/jpeg'" class="item" v-bind:src="media.url"/>
-        <video controls  v-else class="item" v-bind:src="media.url" autoplay loop v-bind:muted="index!=selected" v-bind:id="index"/>
+        <video controls v-else class="item" v-bind:src="media.url" autoplay loop v-bind:muted="index!=selected"
+               v-bind:id="index"/>
       </b-carousel-slide>
     </b-carousel>
   </div>
@@ -28,7 +29,7 @@ export default {
     return {
       images: [],
       imageNames: [],
-      selected:0,
+      selected: 0,
     }
   },
   watch: {
@@ -51,7 +52,7 @@ export default {
                 responseType: 'arraybuffer'
               })
               .then(response => {
-                let type = Object.values(response.headers)[1];
+                let type = Object.values(response.headers)[2];
                 let media = {url: _arrayBufferToBase64(response.data, type), mediatype: type};
                 this.images.push(media)
               })

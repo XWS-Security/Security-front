@@ -4,7 +4,7 @@
       <div class="input-group rounded">
         <input type="search" class="form-control rounded" v-model="searchValue"
                aria-describedby="search-addon"/>
-        <b-button href="#" variant="primary" @click="searchUser">Search</b-button>
+        <b-button href="#" variant="primary" @click="search">Search</b-button>
         <span class="input-group-text border-0" id="search-addon">
           <i class="fas fa-search"></i>
         </span>
@@ -25,54 +25,73 @@
           <b-button href="#" variant="primary">View profile</b-button>
         </b-card>
       </div>
+      <hr>
+      <div class="d-flex align-content-around  justify-content-center flex-wrap light_blue">
+        <post-image v-for="(p,index) in posts" :key="index" v-bind:id="p.postId"
+                    v-bind:image-name="p.imageName"></post-image>
+      </div>
     </b-jumbotron>
   </div>
 </template>
 
 <script>
+import PostImage from "@/components/Nistagram/Profile/PostImage";
+
 export default {
   name: "ProfileSearch",
-
+  components: {PostImage},
   data: function () {
     return {
-      image: null,
-      users: [{about: null, username: null}],
+      posts: null,
+      users: [],
+//      users: [{about: null, username: null}],
       searchValue: '',
+      images: []
     }
   },
 
   mounted() {
-    this.getAllUsers();
+    //this.getAllUsers();
   },
 
   methods: {
 
-    searchUser() {
-
-      if (this.searchValue === '') {
-        this.getAllUsers();
-        return;
-      }
-
-      console.log(this.searchValue)
-
-      this.$http
-          .get(process.env.VUE_APP_BACKEND_URL + 'profile/searchUser/' + this.searchValue)
-          .then(response => {
-            this.users = response.data;
-          }).catch(err => {
-        alert(err.response.data)
-      });
+    search() {
+      this.searchPosts();
+      this.searchUser();
     },
-
     getAllUsers() {
       this.$http
           .get(process.env.VUE_APP_BACKEND_URL + 'profile/getAllUsers')
           .then(response => {
             this.users = response.data;
           }).catch(err => {
-        alert(err.response.data)
+        console.log(err)
       });
+    },
+    searchPosts() {
+      this.$http
+          .get(process.env.VUE_APP_CONTENT_URL + 'search/' + this.searchValue)
+          .then(response => {
+            this.posts = response.data;
+          }).catch(err => {
+        console.log(err)
+      });
+    },
+    searchUser() {
+      if (this.searchValue === '') {
+        this.getAllUsers();
+        return;
+      }
+
+      this.$http
+          .get(process.env.VUE_APP_BACKEND_URL + 'profile/searchUser/' + this.searchValue)
+          .then(response => {
+            this.users = response.data;
+          }).catch(err => {
+        console.log(err)
+      });
+
     }
   }
 
