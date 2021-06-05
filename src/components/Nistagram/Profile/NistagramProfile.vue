@@ -1,7 +1,7 @@
 <template>
-  <div style="margin: 1% 5%">
+  <div style="margin: 1% 20%">
     <div class="d-flex align-content-around justify-content-left flex-wrap light_blue">
-      <profile-picture v-bind:imageName="user.profilePictureName"></profile-picture>
+      <profile-picture v-bind:imageName="user.profilePictureName" v-bind:stories="user.hasStories" v-bind:username="id"></profile-picture>
       <div>
         <br>
         <h4>{{ id }}
@@ -60,8 +60,8 @@ export default {
       } else {
         return this.user.images.length
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

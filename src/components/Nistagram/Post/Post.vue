@@ -5,7 +5,7 @@
         <slide-show v-bind:postId="id"></slide-show>
       </div>
       <div class="col">
-        <div><profile-picture v-bind:image-name="profileImage"></profile-picture>
+        <div><profile-picture v-bind:image-name="profileImage" v-bind:username="username"></profile-picture>
         {{username}}<br/>
           <small>
             {{parseDate(post.date)}} <span v-if="post.location.id!==null">at <a href="">{{post.location.name}}</a></span><br/>

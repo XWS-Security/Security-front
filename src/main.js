@@ -22,6 +22,7 @@ import Profile from "@/components/User/Profile/Profile";
 import ProfileSearch from "@/components/User/Profile/ProfileSearch";
 import NistagramProfile from "@/components/Nistagram/Profile/NistagramProfile";
 import Post from "@/components/Nistagram/Post/Post";
+import Story from "@/components/Nistagram/Story/Story";
 
 Vue.config.productionTip = false
 
@@ -46,6 +47,7 @@ const routes = [
     {path: '/profile/', component: Profile},
     {path: '/nistagramprofile/', component: NistagramProfile, name:'NistagramProfile', props:true},
     {path: '/post', component: Post, name:'Post', props:true},
+    {path: '/story', component: Story, name:'Story', props:true},
     {path: '/profileSearch/', component: ProfileSearch}
 ];
 

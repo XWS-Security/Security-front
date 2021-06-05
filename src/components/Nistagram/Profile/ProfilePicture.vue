@@ -1,6 +1,5 @@
 <template>
-  <img v-bind:src="image" v-on:click="redirectToStories"/>
-
+  <img v-bind:class="{ 'border-warning': stories, border:stories}" v-bind:src="image" v-on:click="redirectToStories"/>
 </template>
 
 <script>
@@ -8,7 +7,7 @@ import {_arrayBufferToBase64} from "@/assets/js/HellperFunctions";
 
 export default {
   name: "ProfilePicture",
-  props: ['imageName'],
+  props: ['imageName', 'username', 'stories'],
   data() {
     return {
       image: null
@@ -33,7 +32,9 @@ export default {
           })
     },
     redirectToStories: function () {
-
+      if(this.stories==true){
+        this.$router.push('/story?username='+ this.username + '&profileImage=' + this.imageName)
+      }
     },
   }
 }
@@ -45,5 +46,9 @@ img {
   width: 100px;
   height: 100px;
   margin: 3%;
+  border-width: 44px;
+}
+.border-warning{
+  border-width:4px !important;
 }
 </style>
