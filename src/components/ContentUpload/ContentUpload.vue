@@ -4,10 +4,11 @@
 
       <!--UPLOAD-->
       <form enctype="multipart/form-data" novalidate v-if="isInitial || isSaving">
-        <h1>Upload images</h1>
+        <h1>Create new post!</h1>
         <div class="dropbox">
-          <input type="file" multiple :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length"
-                 accept="image/*" class="input-file">
+          <input type="file" multiple :name="uploadFieldName" :disabled="isSaving"
+                 @change="upload($event.target.name, $event.target.files); fileCount = $event.target.files.length"
+                 accept="image/*, video/*" class="input-file">
           <p v-if="isInitial">
             Drag your file(s) here to begin<br> or click to browse
           </p>
@@ -16,6 +17,24 @@
           </p>
         </div>
       </form>
+
+      <b-jumbotron>
+        <div class="form-group">
+          <label for="about">About</label>
+          <textarea type="text" v-model="about" class="form-control" id="About"/>
+        </div>
+
+        <div>
+          <select v-model="selectedLocation">
+            <option v-bind:key="location.id" v-for="location in locations" :value="location.name">{{
+                location.name
+              }}
+            </option>
+          </select>
+        </div>
+
+        <b-button @click="uploadContent()">Upload post!</b-button>
+      </b-jumbotron>
 
       <!--SUCCESS-->
       <div v-if="isSuccess">
@@ -44,21 +63,27 @@
 
 <!-- Javascript -->
 <script>
-import { wait } from './utils'
-import { upload } from './file-upload.service'   // real service
+import {wait} from './utils'
+import {upload} from './file-upload.service'   // real service
 
 const STATUS_INITIAL = 0, STATUS_SAVING = 1, STATUS_SUCCESS = 2, STATUS_FAILED = 3;
 
 export default {
+
   name: 'app',
   data() {
     return {
       uploadedFiles: [],
       uploadError: null,
       currentStatus: null,
-      uploadFieldName: 'photos'
+      uploadFieldName: 'photos',
+      locations: [],
+      selectedLocation: null,
+      about: null,
+      formData: null
     }
   },
+
   computed: {
     isInitial() {
       return this.currentStatus === STATUS_INITIAL;
@@ -74,12 +99,14 @@ export default {
     }
   },
   methods: {
+
     reset() {
       // reset form to initial state
       this.currentStatus = STATUS_INITIAL;
       this.uploadedFiles = [];
       this.uploadError = null;
     },
+
     save(formData) {
       // upload data to the server
       this.currentStatus = STATUS_SAVING;
@@ -89,18 +116,15 @@ export default {
           .then(x => {
             this.uploadedFiles = [].concat(x);
             this.currentStatus = STATUS_SUCCESS;
-            this.$http
-                .post(process.env.VUE_APP_CONTENT_URL + 'post/uploadContent', formData)
-                .then(response => {
-                  console.log(response.data)
-                })
+            this.formData = formData;
           })
           .catch(err => {
             this.uploadError = err.response;
             this.currentStatus = STATUS_FAILED;
           });
     },
-    filesChange(fieldName, fileList) {
+
+    upload(fieldName, fileList) {
       // handle file changes
       const formData = new FormData();
 
@@ -115,10 +139,47 @@ export default {
 
       // save it
       this.save(formData);
+    },
+
+    uploadContent() {
+
+      let description = []
+      let tags = []
+      description = this.about.split(" ")
+
+      for (let i = 0; i < description.length; i++) {
+        if (description[i].includes("#")) {
+          tags.push(description[i])
+        }
+      }
+
+      console.log(this.selectedLocation)
+
+      let data = {about: this.about, tags: tags, location: this.selectedLocation};
+
+      this.formData.append("obj", new Blob([JSON.stringify(data)], {
+        type: "application/json"
+      }));
+
+      this.$http
+          .post(process.env.VUE_APP_CONTENT_URL + 'post/uploadContent', this.formData)
+          .then(response => {
+            console.log(response.data)
+          })
+    },
+
+    getLocations() {
+      this.$http
+          .get(process.env.VUE_APP_CONTENT_URL + 'post/locations')
+          .then(response => {
+            this.locations = response.data;
+          })
     }
   },
+
   mounted() {
     this.reset();
+    this.getLocations();
   },
 }
 </script>
