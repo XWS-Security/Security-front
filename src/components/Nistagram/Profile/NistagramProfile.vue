@@ -5,7 +5,8 @@
       <div>
         <br>
         <h4>{{ id }}
-          <button class="btn btn-info">follow</button>
+          <button class="btn btn-info" v-on:click="onFollow()" v-if="!following">follow</button>
+          <button class="btn btn-info" v-on:click="onUnfollow()" v-if="following">unfollow</button>
         </h4>
         {{ user.about }}<br>
         <b>321</b> followers <b>121</b> following <b>{{ numberOfPosts }}</b> posts
@@ -33,12 +34,14 @@ export default {
   data() {
     return {
       user: {},
-      id: ""
+      id: "",
+      following: false
     }
   },
   mounted() {
     this.getId();
     this.getUserInfo();
+    // TODO: get following status
   },
   methods: {
     getId() {
@@ -52,6 +55,34 @@ export default {
             this.user = response.data
           })
     },
+    onFollow() {
+      // let data = {username: this.user.username}
+      let data = {username: 'luka'}
+      this.$http
+          .post(process.env.VUE_APP_FOLLOWER_URL + 'interactions/', data)
+          .then(response => {
+            response.data;
+            this.following = true
+          })
+          .catch(err => {
+            err.response.data
+            alert("Something went wrong!")
+          })
+    },
+    onUnfollow() {
+      // let data = {username: this.user.username}
+      let data = {username: 'luka'}
+      this.$http
+          .put(process.env.VUE_APP_FOLLOWER_URL + 'interactions/', data)
+          .then(response => {
+            response.data;
+            this.following = false
+          })
+          .catch(err => {
+            err.response.data
+            alert("Something went wrong!")
+          })
+    }
   },
   computed: {
     numberOfPosts: function () {
