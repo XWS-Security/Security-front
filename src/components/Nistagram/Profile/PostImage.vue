@@ -33,7 +33,7 @@ export default {
             responseType: 'arraybuffer'
           })
           .then(response => {
-            let type = Object.values(response.headers)[2];
+            let type  = response.headers['content-type'];
             this.media.url = _arrayBufferToBase64(response.data, type)
             this.media.mediatype = type;
           })
