@@ -36,7 +36,6 @@ export default {
   },
   methods: {
     onSubmit() {
-      // TODO: validate all
       if (!this.AreInputsValid) {
         this.errorMessage = 'All fields must be filled!';
         return;
