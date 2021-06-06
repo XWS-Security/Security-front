@@ -1,7 +1,9 @@
 <template>
   <div style="margin: 1% 20%">
     <div class="d-flex align-content-around justify-content-left flex-wrap light_blue">
-      <profile-picture v-bind:imageName="user.profilePictureName" v-bind:stories="user.hasStories" v-bind:username="id"></profile-picture><br>
+      <profile-picture v-bind:imageName="user.profilePictureName" v-bind:stories="user.hasStories"
+                       v-bind:username="id"></profile-picture>
+      <br>
       <div>
         <br>
         <h4>
@@ -22,12 +24,15 @@
         </h4>
         {{ user.about }}<br>
         <b>{{ followersNum }}</b> followers <b> {{ followingNum }}</b> following <b>{{ numberOfPosts }}</b> posts<br>
-        <b-button v-bind:href="linkForHighlights" v-if="user.hasHighlights" variant="warning" pill size="sm" style="float: left">
+        <b-button v-bind:href="linkForHighlights" v-if="user.hasHighlights" variant="warning" pill size="sm"
+                  style="float: left">
           <b-icon icon="star" aria-hidden="true" animation="spin"></b-icon>
-            <small> HIGHLIGHTS </small>
+          <small> HIGHLIGHTS </small>
           <b-icon icon="star" aria-hidden="true" animation="spin"></b-icon>
         </b-button>
-
+        <b-button v-if="closeFriendStatus==='CLOSE_FRIENDS' || closeFriendStatus==='NOT_CLOSE'" variant="success"
+                  v-on:click="changeCloseFriends" pill size="sm"> {{ closeFriendsButtonText }}
+        </b-button>
       </div>
     </div>
 
@@ -55,7 +60,8 @@ export default {
       id: "",
       followingStatus: 'NOT_FOLLOWING',
       followersNum: 0,
-      followingNum: 0
+      followingNum: 0,
+      closeFriendStatus: 'USER_UNSIGNED'
     }
   },
   mounted() {
@@ -63,6 +69,7 @@ export default {
     this.getUserInfo();
     this.getFollowingStatus();
     this.getFollowingStats();
+    this.getCloseFriendStatus();
   },
   methods: {
     getId() {
@@ -77,22 +84,22 @@ export default {
           })
     },
     getFollowingStatus() {
-      this.$http.get(process.env.VUE_APP_FOLLOWER_URL + 'interactions/' + this.id)
+      this.$http.get(process.env.VUE_APP_FOLLOWER_URL + 'interaction/' + this.id)
           .then(response => (this.followingStatus = response.data))
-          .catch(err => (console.log(err.data())))
+          .catch(err => (console.log(err.data)))
     },
     getFollowingStats() {
-      this.$http.get(process.env.VUE_APP_FOLLOWER_URL + 'interactions/numbers/' + this.id)
+      this.$http.get(process.env.VUE_APP_FOLLOWER_URL + 'interaction/numbers/' + this.id)
           .then(response => {
             this.followersNum = response.data.followers;
             this.followingNum = response.data.following;
           })
-          .catch(err => (console.log(err.data())))
+          .catch(err => (console.log(err.data)))
     },
     onFollow() {
       let data = {username: this.id}
       this.$http
-          .post(process.env.VUE_APP_FOLLOWER_URL + 'interactions/', data)
+          .post(process.env.VUE_APP_FOLLOWER_URL + 'interaction/', data)
           .then(response => {
             response.data;
             this.followingStatus = true
@@ -114,7 +121,37 @@ export default {
             err.response.data
             alert("Something went wrong!")
           })
-    }
+    },
+    getCloseFriendStatus() {
+      this.$http
+          .get(process.env.VUE_APP_CONTENT_URL + 'interaction/closeFriends/' + this.id)
+          .then(response => {
+            this.closeFriendStatus = response.data;
+          })
+    },
+    changeCloseFriends() {
+      if (this.closeFriendStatus === 'CLOSE_FRIENDS') {
+        this.removeFriendFromCloseFriends();
+      } else if (this.closeFriendStatus === 'NOT_CLOSE') {
+        this.addFriendToCloseFriends();
+      }
+    },
+    removeFriendFromCloseFriends() {
+      this.$http
+          .put(process.env.VUE_APP_CONTENT_URL + 'interaction/closeFriends/remove/' + this.id)
+          .then(response => {
+            this.closeFriendStatus = response.data;
+            this.getCloseFriendStatus();
+          })
+    },
+    addFriendToCloseFriends() {
+      this.$http
+          .put(process.env.VUE_APP_CONTENT_URL + 'interaction/closeFriends/add/' + this.id)
+          .then(response => {
+            this.closeFriendStatus = response.data;
+            this.getCloseFriendStatus();
+          })
+    },
   },
   computed: {
     numberOfPosts: function () {
@@ -128,8 +165,17 @@ export default {
       let user = this.$store.state.userType;
       return user;
     },
-    linkForHighlights: function (){
+    linkForHighlights: function () {
       return 'story?username=' + this.id + '&profileImage=' + this.user.profilePictureName + '&highlights=true';
+    },
+    closeFriendsButtonText: function () {
+      if (this.closeFriendStatus === 'CLOSE_FRIENDS') {
+        return 'Remove from friends';
+      } else if (this.closeFriendStatus === 'NOT_CLOSE') {
+        return 'Add to close friends';
+      } else {
+        return '';
+      }
     }
   },
 }
