@@ -21,13 +21,13 @@
           </div>
         </h4>
         {{ user.about }}<br>
-        <b>321</b> followers <b>121</b> following <b>{{ numberOfPosts }}</b> posts<br><br>
+        <b>{{ followersNum }}</b> followers <b> {{ followingNum }}</b> following <b>{{ numberOfPosts }}</b> posts<br>
         <b-button v-bind:href="linkForHighlights" v-if="user.hasHighlights" variant="warning" pill size="sm" style="float: left">
           <b-icon icon="star" aria-hidden="true" animation="spin"></b-icon>
             <small> HIGHLIGHTS </small>
           <b-icon icon="star" aria-hidden="true" animation="spin"></b-icon>
         </b-button>
-        <b>{{ followersNum }}</b> followers <b> {{ followingNum }}</b> following <b>{{ numberOfPosts }}</b> posts
+
       </div>
     </div>
 
