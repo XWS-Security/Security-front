@@ -1,12 +1,14 @@
 <template>
   <div class="container" style="border:1px solid #cecece;">
     <div class="row">
-      <div class="col">
+      <div class="col" style="background-color: #2e2e2e">
         <slide-show v-bind:postId="id"></slide-show>
       </div>
       <div class="col">
-        <div><profile-picture v-bind:image-name="profileImage" v-bind:username="username"></profile-picture>
-        {{username}}<br/>
+        <div>
+          <div><profile-picture v-bind:image-name="profileImage" v-bind:username="username" :stories="false"></profile-picture>
+            <a v-bind:href="'nistagramprofile?id=' + username"><h4>{{username}}</h4></a><br/><br/>
+        </div>
           <small>
             {{parseDate(post.date)}} <span v-if="post.location.id!==null">at <a href="">{{post.location.name}}</a></span><br/>
             <a v-for="t in post.tags" v-bind:key="t" href="/">{{ t }} </a>

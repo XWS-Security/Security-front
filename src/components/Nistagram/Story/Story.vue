@@ -56,6 +56,16 @@ export default {
       profileImage:null
     }
   },
+  computed:{
+    linkForGettingStories: function(){
+      if(this.highlights==='true'){
+        return process.env.VUE_APP_CONTENT_URL + 'story/highlights/' + this.username;
+      }
+      else{
+        return process.env.VUE_APP_CONTENT_URL + 'story/' + this.username;
+      }
+    }
+  },
   mounted() {
     this.getProfileData();
     this.getStories();
@@ -63,7 +73,7 @@ export default {
   methods:{
     getStories() {
       this.$http
-          .get(process.env.VUE_APP_CONTENT_URL + 'story/' + this.username)
+          .get(this.linkForGettingStories)
           .then(response => {
             this.stories = response.data
           }).then(this.getMedias)
@@ -72,6 +82,7 @@ export default {
       const urlParams = new URLSearchParams(window.location.search);
       this.username = urlParams.get('username');
       this.profileImageName = urlParams.get('profileImage');
+      this.highlights = urlParams.get('highlights');
       this.$http
           .get(process.env.VUE_APP_CONTENT_URL + 'image/' + this.profileImageName, {
             responseType: 'arraybuffer'
