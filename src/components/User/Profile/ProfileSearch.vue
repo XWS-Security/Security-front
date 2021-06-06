@@ -13,7 +13,6 @@
       <div class="d-flex align-content-around flex-wrap">
         <b-card v-for="(user, index) in users" :value="user.username" :key="index"
                 :title="user.username"
-                img-src="https://bootdey.com/img/Content/avatar/avatar6.png"
                 img-alt="Image"
                 img-top
                 tag="article"
@@ -22,7 +21,7 @@
           <b-card-text>
           </b-card-text>
           {{ user.about }}
-          <b-button href="#" variant="primary">View profile</b-button>
+          <b-button href="#" variant="primary" @click="viewProfile(user.username)">View profile</b-button>
         </b-card>
       </div>
       <hr>
@@ -51,7 +50,7 @@ export default {
   },
 
   mounted() {
-    //this.getAllUsers();
+    this.getAllUsers();
   },
 
   methods: {
@@ -92,6 +91,9 @@ export default {
         console.log(err)
       });
 
+    },
+    viewProfile(userId) {
+      this.$router.push("/nistagramprofile?id=" + userId)
     }
   }
 

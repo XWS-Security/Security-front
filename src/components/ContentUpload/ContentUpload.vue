@@ -2,22 +2,25 @@
   <div id="app">
     <div class="container">
 
+      <h1>Create new post!</h1>
+      <hr>
       <!--UPLOAD-->
-      <form enctype="multipart/form-data" novalidate v-if="isInitial || isSaving">
-        <h1>Create new post!</h1>
-        <div class="dropbox">
-          <input type="file" multiple :name="uploadFieldName" :disabled="isSaving"
-                 @change="upload($event.target.name, $event.target.files); fileCount = $event.target.files.length"
-                 accept="image/*, video/*" class="input-file">
-          <p v-if="isInitial">
-            Drag your file(s) here to begin<br> or click to browse
-          </p>
-          <p v-if="isSaving">
-            Uploading {{ fileCount }} files...
-          </p>
-        </div>
-      </form>
-
+      <b-jumbotron>
+        <form enctype="multipart/form-data" novalidate v-if="isInitial || isSaving">
+          <div class="dropbox">
+            <input type="file" multiple :name="uploadFieldName" :disabled="isSaving"
+                   @change="upload($event.target.name, $event.target.files); fileCount = $event.target.files.length"
+                   accept="image/*, video/*" class="input-file">
+            <h4 v-if="isInitial">
+              Please choose videos/images to upload.
+            </h4>
+            <p v-if="isSaving">
+              Uploading {{ fileCount }} files...
+            </p>
+          </div>
+        </form>
+      </b-jumbotron>
+      <hr>
       <b-jumbotron>
         <div class="form-group">
           <label for="about">About</label>
@@ -25,6 +28,7 @@
         </div>
 
         <div>
+          <label>Location</label>
           <select v-model="selectedLocation">
             <option v-bind:key="location.id" v-for="location in locations" :value="location.name">{{
                 location.name
@@ -33,7 +37,22 @@
           </select>
         </div>
 
-        <b-button @click="uploadContent()">Upload post!</b-button>
+        <select v-model="post">
+          <option value="Story">Story</option>
+          <option selected value="Post">Post</option>
+        </select>
+
+        <hr>
+
+        <select v-model="closeFriends">
+          <option value="Close">Close friends</option>
+          <option selected value="All">All</option>
+        </select>
+
+        <hr>
+
+        <b-button @click="uploadContent()">Upload</b-button>
+
       </b-jumbotron>
 
       <!--SUCCESS-->
@@ -61,10 +80,9 @@
   </div>
 </template>
 
-<!-- Javascript -->
 <script>
 import {wait} from './utils'
-import {upload} from './file-upload.service'   // real service
+import {upload} from './file-upload.service'
 
 const STATUS_INITIAL = 0, STATUS_SAVING = 1, STATUS_SUCCESS = 2, STATUS_FAILED = 3;
 
@@ -80,7 +98,9 @@ export default {
       locations: [],
       selectedLocation: null,
       about: null,
-      formData: null
+      formData: null,
+      post: "",
+      closeFriends: false
     }
   },
 
@@ -143,29 +163,67 @@ export default {
 
     uploadContent() {
 
-      let description = []
-      let tags = []
-      description = this.about.split(" ")
+      console.log(this.post)
 
-      for (let i = 0; i < description.length; i++) {
-        if (description[i].includes("#")) {
-          tags.push(description[i])
+      if (this.post === "Post") {
+        console.log("Post")
+        let description = []
+        let tags = []
+        description = this.about.split(" ")
+
+        for (let i = 0; i < description.length; i++) {
+          if (description[i].includes("#")) {
+            tags.push(description[i])
+          }
         }
+
+        console.log(this.selectedLocation)
+
+        let data = {about: this.about, tags: tags, location: this.selectedLocation};
+
+        this.formData.append("obj", new Blob([JSON.stringify(data)], {
+          type: "application/json"
+        }));
+
+        this.$http
+            .post(process.env.VUE_APP_CONTENT_URL + 'post/uploadContent', this.formData)
+            .then(response => {
+              console.log(response.data)
+            })
+
+      } else if (this.post === "Story") {
+        console.log("Story")
+        let description = []
+        let tags = []
+        description = this.about.split(" ")
+
+        for (let i = 0; i < description.length; i++) {
+          if (description[i].includes("#")) {
+            tags.push(description[i])
+          }
+        }
+
+        console.log(this.selectedLocation)
+
+        let close = false;
+        if (this.closeFriends === "All") {
+          close = false;
+        } else {
+          close = true;
+        }
+
+        let data = {tags: tags, location: this.selectedLocation, closeFriends: close};
+
+        this.formData.append("obj", new Blob([JSON.stringify(data)], {
+          type: "application/json"
+        }));
+
+        this.$http
+            .post(process.env.VUE_APP_CONTENT_URL + 'story/uploadContent', this.formData)
+            .then(response => {
+              console.log(response.data)
+            })
       }
-
-      console.log(this.selectedLocation)
-
-      let data = {about: this.about, tags: tags, location: this.selectedLocation};
-
-      this.formData.append("obj", new Blob([JSON.stringify(data)], {
-        type: "application/json"
-      }));
-
-      this.$http
-          .post(process.env.VUE_APP_CONTENT_URL + 'post/uploadContent', this.formData)
-          .then(response => {
-            console.log(response.data)
-          })
     },
 
     getLocations() {
@@ -185,32 +243,5 @@ export default {
 </script>
 
 <style>
-.dropbox {
-  outline: 2px dashed grey; /* the dash box */
-  outline-offset: -10px;
-  background: lightcyan;
-  color: dimgray;
-  padding: 10px 10px;
-  min-height: 200px; /* minimum height */
-  position: relative;
-  cursor: pointer;
-}
 
-.input-file {
-  opacity: 1; /* invisible but it's there! */
-  width: 100%;
-  height: 200px;
-  position: absolute;
-  cursor: pointer;
-}
-
-.dropbox:hover {
-  background: lightblue; /* when mouse over to the drop zone, change color */
-}
-
-.dropbox p {
-  font-size: 1.2em;
-  text-align: center;
-  padding: 50px 0;
-}
 </style>
