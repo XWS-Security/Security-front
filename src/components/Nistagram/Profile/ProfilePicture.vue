@@ -35,6 +35,9 @@ export default {
       if(this.stories==true){
         this.$router.push('/story?username='+ this.username + '&profileImage=' + this.imageName)
       }
+      else if(this.stories===false){
+        this.$router.push('nistagramprofile?id=' + this.username)
+      }
     },
   }
 }

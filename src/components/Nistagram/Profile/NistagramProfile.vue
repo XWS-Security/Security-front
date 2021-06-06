@@ -1,8 +1,7 @@
 <template>
   <div style="margin: 1% 20%">
     <div class="d-flex align-content-around justify-content-left flex-wrap light_blue">
-      <profile-picture v-bind:imageName="user.profilePictureName" v-bind:stories="user.hasStories"
-                       v-bind:username="id"></profile-picture>
+      <profile-picture v-bind:imageName="user.profilePictureName" v-bind:stories="user.hasStories" v-bind:username="id"></profile-picture><br>
       <div>
         <br>
         <h4>
@@ -22,10 +21,16 @@
           </div>
         </h4>
         {{ user.about }}<br>
+        <b>321</b> followers <b>121</b> following <b>{{ numberOfPosts }}</b> posts<br><br>
+        <b-button v-bind:href="linkForHighlights" v-if="user.hasHighlights" variant="warning" pill size="sm" style="float: left">
+          <b-icon icon="star" aria-hidden="true" animation="spin"></b-icon>
+            <small> HIGHLIGHTS </small>
+          <b-icon icon="star" aria-hidden="true" animation="spin"></b-icon>
+        </b-button>
         <b>{{ followersNum }}</b> followers <b> {{ followingNum }}</b> following <b>{{ numberOfPosts }}</b> posts
       </div>
-
     </div>
+
     <hr>
     <div class="d-flex align-content-around  justify-content-center flex-wrap light_blue">
       <post-image v-for="i in user.images" :key="i.imageName"
@@ -122,6 +127,9 @@ export default {
     userType() {
       let user = this.$store.state.userType;
       return user;
+    },
+    linkForHighlights: function (){
+      return 'story?username=' + this.id + '&profileImage=' + this.user.profilePictureName + '&highlights=true';
     }
   },
 }
