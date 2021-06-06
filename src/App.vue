@@ -10,6 +10,7 @@
         <ChangePasswordLink v-if="user !== null"></ChangePasswordLink>
         <ProfileLink v-if="user === 'NistagramUser'"></ProfileLink>
         <NotificationsLink v-if="user === 'NistagramUser'"></NotificationsLink>
+        <UploadContentLink v-if="user === 'NistagramUser'"></UploadContentLink>
         <ProfileSearchLink></ProfileSearchLink>
         <TestLink></TestLink>
       </NavGroup>
@@ -32,11 +33,13 @@ import ChangePasswordLink from "@/components/NavBar/ChangePasswordLink";
 import ProfileLink from "@/components/NavBar/ProfileLink";
 import ProfileSearchLink from "@/components/NavBar/ProfileSearchLink";
 import NotificationsLink from "@/components/NavBar/NotificationsLink";
+import UploadContentLink from "@/components/NavBar/UploadContentLink";
 
 export default {
   name: 'App',
   components: {
     NotificationsLink,
+    UploadContentLink,
     ProfileSearchLink,
     ProfileLink,
     ChangePasswordLink,
