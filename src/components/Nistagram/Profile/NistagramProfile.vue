@@ -84,12 +84,12 @@ export default {
           })
     },
     getFollowingStatus() {
-      this.$http.get(process.env.VUE_APP_FOLLOWER_URL + 'interaction/' + this.id)
+      this.$http.get(process.env.VUE_APP_FOLLOWER_URL + 'interactions/' + this.id)
           .then(response => (this.followingStatus = response.data))
           .catch(err => (console.log(err.data)))
     },
     getFollowingStats() {
-      this.$http.get(process.env.VUE_APP_FOLLOWER_URL + 'interaction/numbers/' + this.id)
+      this.$http.get(process.env.VUE_APP_FOLLOWER_URL + 'interactions/numbers/' + this.id)
           .then(response => {
             this.followersNum = response.data.followers;
             this.followingNum = response.data.following;
@@ -99,7 +99,7 @@ export default {
     onFollow() {
       let data = {username: this.id}
       this.$http
-          .post(process.env.VUE_APP_FOLLOWER_URL + 'interaction/', data)
+          .post(process.env.VUE_APP_FOLLOWER_URL + 'interactions/', data)
           .then(response => {
             response.data;
             this.followingStatus = true

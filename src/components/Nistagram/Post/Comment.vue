@@ -1,14 +1,14 @@
 <template>
   <div class="container rounded" style="border:1px solid #cecece;">
     <div class="row">
-      <div class="col-sm-2">
+      <div class="col-sm-2 my-auto">
         <a v-bind:href="'nistagramprofile?id=' + comment.username">
           <img v-bind:src="image"><br/>
           <small>{{ comment.username }}</small><br/>
         </a>
         <small>{{ parseDate(comment.date) }}</small>
       </div>
-      <div class="col-sm-10">{{ comment.text }}</div>
+      <div class="col-sm-10 my-auto">{{ comment.text }}</div>
     </div>
   </div>
 </template>

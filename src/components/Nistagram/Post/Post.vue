@@ -6,18 +6,33 @@
       </div>
       <div class="col">
         <div>
-          <div><profile-picture v-bind:image-name="profileImage" v-bind:username="username" :stories="false"></profile-picture>
-            <a v-bind:href="'nistagramprofile?id=' + username"><h4>{{username}}</h4></a><br/><br/>
-        </div>
+          <div>
+            <profile-picture v-bind:image-name="profileImage" v-bind:username="username"
+                             :stories="false"></profile-picture>
+            <a v-bind:href="'nistagramprofile?id=' + username"><h4>{{ username }}</h4></a><br/><br/>
+          </div>
           <small>
-            {{parseDate(post.date)}} <span v-if="post.location.id!==null">at <a href="">{{post.location.name}}</a></span><br/>
+            {{ parseDate(post.date) }} <span v-if="post.location.id!==null">at <a
+              href="">{{ post.location.name }}</a></span><br/>
             <a v-for="t in post.tags" v-bind:key="t" href="/">{{ t }} </a>
           </small>
-          {{post.about}}<br/>
-          <a><b>{{post.likes}}</b> likes</a>  <a><b>{{post.dislikes}}</b> dislikes</a>
+          {{ post.about }}<br/>
+
+          <button class="btn btn-success mr-2" v-on:click="onLike()">
+            <b-icon-hand-thumbs-up></b-icon-hand-thumbs-up>
+          </button>
+          <button class="btn btn-danger" v-on:click="onDislike()">
+            <b-icon-hand-thumbs-down></b-icon-hand-thumbs-down>
+          </button>
+          <br/>
+
+          <a><b>{{ post.likes }}</b> likes</a> <a><b>{{ post.dislikes }}</b> dislikes</a>
         </div>
         <hr>
-        <div v-for="c in post.commentIds" v-bind:key="c" >
+        <div>
+          <add-comment v-bind:post-id="id"></add-comment>
+        </div>
+        <div v-for="c in post.commentIds" v-bind:key="c">
           <br>
           <comment v-bind:id="c">
           </comment>
@@ -32,38 +47,51 @@ import SlideShow from "@/components/Nistagram/Post/SlideShow";
 import ProfilePicture from "@/components/Nistagram/Profile/ProfilePicture";
 import {formatDate} from "@/assets/js/HellperFunctions";
 import Comment from "@/components/Nistagram/Post/Comment";
+import AddComment from "@/components/Nistagram/Post/AddComment";
 
 export default {
   name: "Post",
-  components: {Comment, ProfilePicture, SlideShow},
-  data(){
+  components: {AddComment, Comment, ProfilePicture, SlideShow},
+  data() {
     return {
-      id:'',
-      profileImage:'',
-      username:'',
-      post:{likes:0, dislikes:0, date:null, location:{name:null, id:null}, tags:[], commentIds:[], about:""},
+      id: '',
+      profileImage: '',
+      username: '',
+      post: {likes: 0, dislikes: 0, date: null, location: {name: null, id: null}, tags: [], commentIds: [], about: ""},
     }
   },
   mounted() {
     this.getQueryParams();
     this.getPostInfo();
   },
-  methods:{
+  methods: {
     getQueryParams() {
       const urlParams = new URLSearchParams(window.location.search);
       this.id = urlParams.get('id');
-      this.profileImage=urlParams.get('profileImg');
-      this.username=urlParams.get('username');
+      this.profileImage = urlParams.get('profileImg');
+      this.username = urlParams.get('username');
     },
-    getPostInfo(){
+    getPostInfo() {
       this.$http
           .get(process.env.VUE_APP_CONTENT_URL + 'post/' + this.id)
           .then(response => {
             this.post = response.data
           })
     },
-    parseDate(date){
+    parseDate(date) {
       return formatDate(date);
+    },
+    onLike() {
+      let data = {postId: this.id}
+      this.$http.put(process.env.VUE_APP_CONTENT_URL + 'post/like', data)
+          .then()
+          .catch(err => (this.console.log(err.data)))
+    },
+    onDislike() {
+      let data = {postId: this.id}
+      this.$http.put(process.env.VUE_APP_CONTENT_URL + 'post/dislike', data)
+          .then()
+          .catch(err => (this.console.log(err.data)))
     }
   }
 }
