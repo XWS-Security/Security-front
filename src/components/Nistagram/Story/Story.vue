@@ -52,14 +52,18 @@ export default {
       storiesWithImages:[],
       selected:0,
       username:"",
+      storiesType:"",
       profileImageName:null,
       profileImage:null
     }
   },
   computed:{
     linkForGettingStories: function(){
-      if(this.highlights==='true'){
+      if(this.storiesType==='highlights'){
         return process.env.VUE_APP_CONTENT_URL + 'story/highlights/' + this.username;
+      }
+      else if(this.storiesType==='my'){
+        return process.env.VUE_APP_CONTENT_URL + 'story/my';
       }
       else{
         return process.env.VUE_APP_CONTENT_URL + 'story/' + this.username;
@@ -82,7 +86,24 @@ export default {
       const urlParams = new URLSearchParams(window.location.search);
       this.username = urlParams.get('username');
       this.profileImageName = urlParams.get('profileImage');
-      this.highlights = urlParams.get('highlights');
+      this.storiesType = urlParams.get('storiesType');
+
+      if(this.storiesType==='my'){
+        this.getLoggedUserInfo();
+      }
+      else
+        this.getProfilePicture();
+    },
+    getLoggedUserInfo(){
+      this.$http
+          .put(process.env.VUE_APP_CONTENT_URL + 'interaction/loggedUser' + this.id)
+          .then(response => {
+            this.username = response.data.username;
+            this.profileImageName = response.data.profileImg;
+            this.getProfilePicture();
+          })
+    },
+    getProfilePicture(){
       this.$http
           .get(process.env.VUE_APP_CONTENT_URL + 'image/' + this.profileImageName, {
             responseType: 'arraybuffer'
