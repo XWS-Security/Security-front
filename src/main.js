@@ -25,6 +25,7 @@ import Post from "@/components/Nistagram/Post/Post";
 import Story from "@/components/Nistagram/Story/Story";
 import ContentUpload from "./components/ContentUpload/ContentUpload";
 import Notifications from "@/components/Nistagram/Notifications/Notifications";
+import Favourites from "@/components/Nistagram/favourites/Favourites";
 
 Vue.config.productionTip = false
 
@@ -47,11 +48,12 @@ const routes = [
     {path: '/passwordReset/:email', component: PasswordReset},
     {path: '/changePassword/', component: ChangePassword},
     {path: '/profile/', component: Profile},
-    {path: '/nistagramprofile/', component: NistagramProfile, name:'NistagramProfile', props:true},
-    {path: '/post', component: Post, name:'Post', props:true},
-    {path: '/story', component: Story, name:'Story', props:true},
+    {path: '/nistagramprofile/', component: NistagramProfile, name: 'NistagramProfile', props: true},
+    {path: '/post', component: Post, name: 'Post', props: true},
+    {path: '/story', component: Story, name: 'Story', props: true},
     {path: '/profileSearch/', component: ProfileSearch},
     {path: '/contentUpload', component: ContentUpload},
+    {path: '/favourites', component: Favourites},
     {path: '/notifications', component: Notifications}
 ];
 

@@ -12,7 +12,7 @@
             <a v-bind:href="'nistagramprofile?id=' + username"><h4>{{ username }}</h4></a><br/><br/>
           </div>
           <small>
-            {{ parseDate(post.date) }} <span v-if="post.location.id!==null">at <a
+            {{ parseDate(post.date) }} <span v-if="post.location!==null">at <a
               href="">{{ post.location.name }}</a></span><br/>
             <a v-for="t in post.tags" v-bind:key="t" href="/">{{ t }} </a>
           </small>
@@ -28,6 +28,7 @@
 
           <a><b>{{ post.likes }}</b> likes</a> <a><b>{{ post.dislikes }}</b> dislikes</a>
         </div>
+        <b-button @click="saveOrRemove" v-if="isSaveVisible">{{ favouritesButtonName }}</b-button>
         <hr>
         <div>
           <add-comment v-bind:post-id="id"></add-comment>
@@ -58,11 +59,14 @@ export default {
       profileImage: '',
       username: '',
       post: {likes: 0, dislikes: 0, date: null, location: {name: null, id: null}, tags: [], commentIds: [], about: ""},
+      isFavourite: false,
+      isSaveVisible: false
     }
   },
   mounted() {
     this.getQueryParams();
     this.getPostInfo();
+    this.checkIsFavourite();
   },
   methods: {
     getQueryParams() {
@@ -81,6 +85,25 @@ export default {
     parseDate(date) {
       return formatDate(date);
     },
+    checkIsFavourite() {
+      this.$http
+          .get(process.env.VUE_APP_CONTENT_URL + 'favourites/' + this.id)
+          .then(response => {
+            this.isSaveVisible = true;
+            this.isFavourite = response.data;
+          }).catch(err => {
+        console.log(err);
+        this.isSaveVisible = false;
+      });
+    },
+    saveOrRemove() {
+      this.$http
+          .put(process.env.VUE_APP_CONTENT_URL + 'favourites/' + this.id)
+          .then(response => {
+            console.log(response.data)
+            this.checkIsFavourite();
+          })
+    },
     onLike() {
       let data = {postId: this.id}
       this.$http.put(process.env.VUE_APP_CONTENT_URL + 'post/like', data)
@@ -92,6 +115,18 @@ export default {
       this.$http.put(process.env.VUE_APP_CONTENT_URL + 'post/dislike', data)
           .then()
           .catch(err => (this.console.log(err.data)))
+    }
+  },
+
+  computed: {
+    favouritesButtonName() {
+      let buttonName = "";
+      if (this.isFavourite == true)
+        buttonName = "Remove from favourites"
+      else {
+        buttonName = "Save to favourites"
+      }
+      return buttonName;
     }
   }
 }
