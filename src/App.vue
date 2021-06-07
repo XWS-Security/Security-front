@@ -11,6 +11,7 @@
         <ProfileLink v-if="user === 'NistagramUser'"></ProfileLink>
         <NotificationsLink v-if="user === 'NistagramUser'"></NotificationsLink>
         <UploadContentLink v-if="user === 'NistagramUser'"></UploadContentLink>
+        <SavedContentLink v-if="user === 'NistagramUser'"></SavedContentLink>
         <ProfileSearchLink></ProfileSearchLink>
         <TestLink></TestLink>
       </NavGroup>
@@ -34,10 +35,12 @@ import ProfileLink from "@/components/NavBar/ProfileLink";
 import ProfileSearchLink from "@/components/NavBar/ProfileSearchLink";
 import NotificationsLink from "@/components/NavBar/NotificationsLink";
 import UploadContentLink from "@/components/NavBar/UploadContentLink";
+import SavedContentLink from "@/components/NavBar/SavedContentLink";
 
 export default {
   name: 'App',
   components: {
+    SavedContentLink,
     NotificationsLink,
     UploadContentLink,
     ProfileSearchLink,

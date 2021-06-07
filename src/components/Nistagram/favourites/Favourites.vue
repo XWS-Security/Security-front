@@ -1,25 +1,32 @@
 <template>
-  <div class="d-flex align-content-around  justify-content-center flex-wrap light_blue" style="margin: 1% 20%">
-    <post-image v-for="p in posts" :key="p.postId"
+  <div class="d-flex align-content-around  justify-content-center flex-wrap light_blue">
+    <post-image v-for="p in posts" :key="p.id"
                 v-bind:imageName="p.imageName"
-                v-bind:id="p.postId"
+                v-bind:id="p.id"
                 v-bind:user="p.userId"
-                v-bind:profile-img="p.profilePictureName"></post-image>
+                v-bind:profile-img="p.userProfileImageName"></post-image>
   </div>
 </template>
 
 <script>
+import PostImage from "@/components/Nistagram/Profile/PostImage";
+
 export default {
+  components: {PostImage},
   name: "Favourites",
-  data(){
-    return{
-      posts:[]
+  data() {
+    return {
+      posts: []
     }
   },
   mounted() {
+    this.$http
+        .get(process.env.VUE_APP_CONTENT_URL + 'favourites')
+        .then(response => {
+          this.posts = response.data;
+        })
   },
-  methods:{
-  },
+  methods: {},
 }
 </script>
 
