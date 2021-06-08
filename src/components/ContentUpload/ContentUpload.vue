@@ -37,6 +37,8 @@
           </select>
         </div>
 
+        <hr>
+
         <select v-model="post">
           <option value="Story">Story</option>
           <option selected value="Post">Post</option>
@@ -47,6 +49,13 @@
         <select v-model="closeFriends">
           <option value="Close">Close friends</option>
           <option selected value="All">All</option>
+        </select>
+
+        <hr>
+
+        <select v-model="highlights">
+          <option value="Highlights">Highlights</option>
+          <option selected value="Normal">Normal</option>
         </select>
 
         <hr>
@@ -100,7 +109,8 @@ export default {
       about: null,
       formData: null,
       post: "",
-      closeFriends: false
+      closeFriends: false,
+      highlights: ""
     }
   },
 
@@ -192,15 +202,20 @@ export default {
             })
 
       } else if (this.post === "Story") {
-        console.log("Story")
+
         let description = []
         let tags = []
         description = this.about.split(" ")
+        let highlights = false;
 
         for (let i = 0; i < description.length; i++) {
           if (description[i].includes("#")) {
             tags.push(description[i])
           }
+        }
+
+        if (this.highlights == "Highlights") {
+          highlights = true;
         }
 
         console.log(this.selectedLocation)
@@ -212,7 +227,7 @@ export default {
           close = true;
         }
 
-        let data = {tags: tags, location: this.selectedLocation, closeFriends: close};
+        let data = {tags: tags, location: this.selectedLocation, closeFriends: close, highlights: highlights};
 
         this.formData.append("obj", new Blob([JSON.stringify(data)], {
           type: "application/json"
