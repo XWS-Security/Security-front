@@ -166,7 +166,7 @@ export default {
       return user;
     },
     linkForHighlights: function () {
-      return 'story?username=' + this.id + '&profileImage=' + this.user.profilePictureName + '&highlights=true';
+      return 'story?username=' + this.id + '&profileImage=' + this.user.profilePictureName + '&storyType=highlights';
     },
     closeFriendsButtonText: function () {
       if (this.closeFriendStatus === 'CLOSE_FRIENDS') {
