@@ -2,8 +2,8 @@
   <div>
     <b-jumbotron>
       <div class="form-group">
-        <label for="emailInput">Email address</label>
-        <input type="email" class="form-control" id="emailInput" placeholder="Enter email" v-model="email">
+        <label for="usernameInput">Username</label>
+        <input type="text" class="form-control" id="usernameInput" placeholder="Enter username" v-model="username">
       </div>
       <div class="form-group">
         <label for="passwordInput">Password</label>
@@ -14,7 +14,7 @@
         <input type="text" class="form-control" id="twoFactorAuthSecret" placeholder="TwoFactorAuthSecret"
                v-model="secret">
       </div>
-      <div class="form-group" v-if="!AreInputsValid || !IsEmailValid">
+      <div class="form-group" v-if="!AreInputsValid || !IsUsernameValid">
         <p>{{ errorMessage }}</p>
       </div>
       <div class="form-group">
@@ -33,7 +33,7 @@ export default {
   name: "Login",
   data: function () {
     return {
-      email: null,
+      username: null,
       password: null,
       secret: null,
       errorMessage: ''
@@ -56,7 +56,7 @@ export default {
       }
       this.errorMessage = '';
 
-      let user = {email: this.email, password: this.password}
+      let user = {username: this.username, password: this.password}
       this.$http
           .post(process.env.VUE_APP_BACKEND_URL + 'login/twoFactorAuth', user)
           .then(response => {
@@ -80,7 +80,7 @@ export default {
       let store = this.$store;
       this.errorMessage = '';
 
-      let user = {email: this.email, password: this.password, twoFactorAuthenticationSecret: this.secret}
+      let user = {username: this.username, password: this.password, twoFactorAuthenticationSecret: this.secret}
       this.$http
           .post(process.env.VUE_APP_BACKEND_URL + 'login/', user)
           .then(response => {
@@ -103,20 +103,20 @@ export default {
       }
     },
     onResetPassword() {
-      if (!this.IsEmailValid) {
-        this.errorMessage = 'Email must be entered!';
+      if (!this.IsUsernameValid) {
+        this.errorMessage = 'Username cannot be empty!';
         return;
       }
       this.errorMessage = '';
-      this.$router.push('passwordReset/' + this.email)
+      this.$router.push('passwordReset/' + this.username)
     }
   },
   computed: {
     AreInputsValid() {
-      return this.email !== null && this.password !== null && this.email !== '' && this.password !== '';
+      return this.username !== null && this.password !== null && this.username !== '' && this.password !== '';
     },
-    IsEmailValid() {
-      return this.email !== null && this.email !== '';
+    IsUsernameValid() {
+      return this.username !== null && this.username !== '';
     }
   }
 }
