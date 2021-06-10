@@ -12,7 +12,7 @@
         <NotificationsLink v-if="user === 'NistagramUser'"></NotificationsLink>
         <UploadContentLink v-if="user === 'NistagramUser'"></UploadContentLink>
         <SavedContentLink v-if="user === 'NistagramUser'"></SavedContentLink>
-        <MyStoriesLink></MyStoriesLink>
+        <MyStoriesLink v-if="user === 'NistagramUser'"></MyStoriesLink>
         <ProfileSearchLink></ProfileSearchLink>
         <TestLink></TestLink>
       </NavGroup>
