@@ -220,6 +220,8 @@ export default {
           .put(process.env.VUE_APP_BACKEND_URL + 'profile/updateProfileInfo', basicInfo)
           .then(response => {
             alert(response.data);
+            this.$store.dispatch('logOut');
+            this.$router.push("/");
           }).catch(err => {
         alert(err.response.data)
       });
