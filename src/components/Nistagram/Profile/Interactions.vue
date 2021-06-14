@@ -7,8 +7,8 @@
       <b-dropdown-item href="#" v-if="!close" v-on:click="addClose()">add close friend</b-dropdown-item>
       <b-dropdown-item href="#" v-if="close" v-on:click="removeClose()">remove close friend</b-dropdown-item>
       <b-dropdown-divider v-if="notifications !== ''"></b-dropdown-divider>
-      <b-dropdown-item href="#" variant="danger" v-if="!blocked">block</b-dropdown-item>
-      <b-dropdown-item href="#" variant="danger" v-if="blocked">unblock</b-dropdown-item>
+      <b-dropdown-item href="#" variant="danger" v-if="!blocked" v-on:click="block()">block</b-dropdown-item>
+      <b-dropdown-item href="#" variant="danger" v-if="blocked" v-on:click="unblock()">unblock</b-dropdown-item>
     </b-dropdown>
   </div>
 </template>
@@ -32,6 +32,7 @@ export default {
   methods: {
     onClick() {
       if (this.status === 'FOLLOWING' || this.status === 'REQUEST_SENT') this.unfollow();
+      else if (this.status === 'BLOCKED') alert("User is blocked")
       else this.follow()
     },
     follow() {
@@ -103,16 +104,37 @@ export default {
           })
     },
     block() {
-      // TODO:
+      let data = {username: this.username}
+      this.$http
+          .put(process.env.VUE_APP_FOLLOWER_URL + 'blocked/', data)
+          .then(response => {
+            response.data;
+            this.getFollowStatus();
+          })
+          .catch(err => {
+            err.response.data
+            alert("Something went wrong!")
+          })
     },
     unblock() {
-      // TODO:
+      let data = {username: this.username}
+      this.$http
+          .put(process.env.VUE_APP_FOLLOWER_URL + 'blocked/unblock', data)
+          .then(response => {
+            response.data;
+            this.getFollowStatus();
+          })
+          .catch(err => {
+            err.response.data
+            alert("Something went wrong!")
+          })
     },
     getFollowStatus() {
       this.$http.get(process.env.VUE_APP_FOLLOWER_URL + 'interactions/' + this.username)
           .then(response => {
             this.status = response.data.following;
             this.notifications = response.data.notifications;
+            this.blocked = response.data.blocked
           })
           .catch(err => (console.log(err.data)))
     },
@@ -127,14 +149,16 @@ export default {
   computed: {
     text() {
       switch (this.status) {
-        case "FOLLOWING":
+        case 'FOLLOWING':
           return 'unfollow';
-        case "NOT_FOLLOWING":
+        case 'NOT_FOLLOWING':
           return 'follow';
-        case "FOLLOWS_YOU":
+        case 'FOLLOWS_YOU':
           return 'follow back';
-        case "REQUEST_SENT":
+        case 'REQUEST_SENT':
           return 'unsend';
+        case 'BLOCKED':
+          return "blocked";
       }
       return ''
     }
