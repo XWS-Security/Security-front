@@ -30,6 +30,8 @@
         </div>
         <b-button @click="saveOrRemove" v-if="isSaveVisible">{{ favouritesButtonName }}</b-button>
         <hr>
+        <button class="btn btn-danger" v-on:click="setReportVisibility">Report</button>
+        <hr>
         <div>
           <add-comment v-bind:post-id="id"></add-comment>
         </div>
@@ -39,6 +41,12 @@
           </comment>
         </div>
       </div>
+      <b-jumbotron id="report" v-if="reportVisible">
+        <textarea class="form-control" type="text" placeholder="Report reason" v-model="reason"></textarea>
+        <div class="input-group-append">
+          <button class="btn btn-danger" v-on:click="sendReport">Send report</button>
+        </div>
+      </b-jumbotron>
     </div>
   </div>
 </template>
@@ -60,7 +68,9 @@ export default {
       username: '',
       post: {likes: 0, dislikes: 0, date: null, location: {name: null, id: null}, tags: [], commentIds: [], about: ""},
       isFavourite: false,
-      isSaveVisible: false
+      isSaveVisible: false,
+      reason: '',
+      reportVisible: false
     }
   },
   mounted() {
@@ -115,6 +125,20 @@ export default {
       this.$http.put(process.env.VUE_APP_CONTENT_URL + 'post/dislike', data)
           .then()
           .catch(err => (this.console.log(err.data)))
+    },
+    sendReport() {
+
+      let reportData = {reason: this.reason, contentId: this.id}
+
+      this.$http.post(process.env.VUE_APP_CONTENT_URL + 'report/', reportData)
+          .then(response => {
+            alert(response.data)
+          })
+          .catch(err => (this.console.log(err.data)))
+    },
+
+    setReportVisibility() {
+      this.reportVisible = !this.reportVisible;
     }
   },
 
