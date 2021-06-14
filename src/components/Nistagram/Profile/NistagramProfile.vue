@@ -8,17 +8,9 @@
         <br>
         <h4>
           <div class="row">
-            <div class="col">{{ id }}</div>
-            <div class="col" v-if="userType === 'NistagramUser'">
-              <button class="btn btn-info" v-on:click="onFollow()" v-if="followingStatus === 'NOT_FOLLOWING'">
-                follow
-              </button>
-              <button class="btn btn-info" v-on:click="onUnfollow()" v-if="followingStatus === 'FOLLOWING'">
-                unfollow
-              </button>
-              <button class="btn btn-info" v-on:click="onUnfollow()" v-if="followingStatus === 'WAITING_FOR_APPROVAL'">
-                unsend
-              </button>
+            <div class="col m-auto">{{ id }}</div>
+            <div class="col m-auto" v-if="userType === 'NistagramUser'">
+              <interactions v-if="renderInteractions" v-bind:username="this.id"></interactions>
             </div>
           </div>
         </h4>
@@ -50,10 +42,11 @@
 <script>
 import ProfilePicture from "@/components/Nistagram/Profile/ProfilePicture";
 import PostImage from "@/components/Nistagram/Profile/PostImage";
+import Interactions from "@/components/Nistagram/Profile/Interactions";
 
 export default {
   name: "NistagramProfile",
-  components: {PostImage, ProfilePicture},
+  components: {Interactions, PostImage, ProfilePicture},
   data() {
     return {
       user: {},
@@ -61,13 +54,13 @@ export default {
       followingStatus: 'NOT_FOLLOWING',
       followersNum: 0,
       followingNum: 0,
-      closeFriendStatus: 'USER_UNSIGNED'
+      closeFriendStatus: 'USER_UNSIGNED',
+      renderInteractions: false
     }
   },
   mounted() {
     this.getId();
     this.getUserInfo();
-    this.getFollowingStatus();
     this.getFollowingStats();
     this.getCloseFriendStatus();
   },
@@ -75,6 +68,7 @@ export default {
     getId() {
       const urlParams = new URLSearchParams(window.location.search);
       this.id = urlParams.get('id');
+      this.renderInteractions = true;
     },
     getUserInfo() {
       this.$http
@@ -83,11 +77,6 @@ export default {
             this.user = response.data
           })
     },
-    getFollowingStatus() {
-      this.$http.get(process.env.VUE_APP_FOLLOWER_URL + 'interactions/' + this.id)
-          .then(response => (this.followingStatus = response.data))
-          .catch(err => (console.log(err.data)))
-    },
     getFollowingStats() {
       this.$http.get(process.env.VUE_APP_FOLLOWER_URL + 'interactions/numbers/' + this.id)
           .then(response => {
@@ -95,32 +84,6 @@ export default {
             this.followingNum = response.data.following;
           })
           .catch(err => (console.log(err.data)))
-    },
-    onFollow() {
-      let data = {username: this.id}
-      this.$http
-          .post(process.env.VUE_APP_FOLLOWER_URL + 'interactions/', data)
-          .then(response => {
-            response.data;
-            this.followingStatus = true
-          })
-          .catch(err => {
-            err.response.data
-            alert("Something went wrong!")
-          })
-    },
-    onUnfollow() {
-      let data = {username: this.id}
-      this.$http
-          .put(process.env.VUE_APP_FOLLOWER_URL + 'interactions/', data)
-          .then(response => {
-            response.data;
-            this.followingStatus = false
-          })
-          .catch(err => {
-            err.response.data
-            alert("Something went wrong!")
-          })
     },
     getCloseFriendStatus() {
       this.$http
