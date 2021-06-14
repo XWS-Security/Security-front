@@ -4,8 +4,11 @@
       <b-dropdown-item href="#" v-if="notifications === 'ON'" v-on:click="mute()">mute</b-dropdown-item>
       <b-dropdown-item href="#" v-if="notifications === 'OFF'" v-on:click="unmute()">unmute</b-dropdown-item>
       <b-dropdown-divider v-if="notifications !== ''"></b-dropdown-divider>
-      <b-dropdown-item href="#" variant="danger" v-if="blocked === false">block</b-dropdown-item>
-      <b-dropdown-item href="#" variant="danger" v-if="blocked === true">unblock</b-dropdown-item>
+      <b-dropdown-item href="#" v-if="!close" v-on:click="addClose()">add close friend</b-dropdown-item>
+      <b-dropdown-item href="#" v-if="close" v-on:click="removeClose()">remove close friend</b-dropdown-item>
+      <b-dropdown-divider v-if="notifications !== ''"></b-dropdown-divider>
+      <b-dropdown-item href="#" variant="danger" v-if="!blocked">block</b-dropdown-item>
+      <b-dropdown-item href="#" variant="danger" v-if="blocked">unblock</b-dropdown-item>
     </b-dropdown>
   </div>
 </template>
@@ -18,18 +21,13 @@ export default {
     return {
       status: 'FOLLOWING',
       notifications: '',
-      blocked: false
+      blocked: false,
+      close: false
     }
   },
   mounted() {
-    this.$http.get(process.env.VUE_APP_FOLLOWER_URL + 'interactions/' + this.username)
-        .then(response => {
-          this.status = response.data.following;
-          this.notifications = response.data.notifications;
-          console.log("status: " + this.status)
-          console.log("notifications: " + this.notifications)
-        })
-        .catch(err => (console.log(err.data)))
+    this.getFollowStatus()
+    this.getClose()
   },
   methods: {
     onClick() {
@@ -42,7 +40,7 @@ export default {
           .post(process.env.VUE_APP_FOLLOWER_URL + 'interactions/', data)
           .then(response => {
             response.data;
-            this.$router.go(0);
+            this.getFollowStatus();
           })
           .catch(err => {
             err.response.data
@@ -55,7 +53,7 @@ export default {
           .put(process.env.VUE_APP_FOLLOWER_URL + 'interactions/', data)
           .then(response => {
             response.data;
-            this.$router.go(0);
+            this.getFollowStatus();
           })
           .catch(err => {
             err.response.data
@@ -68,7 +66,7 @@ export default {
           .put(process.env.VUE_APP_FOLLOWER_URL + 'notifications/mute', data)
           .then(response => {
             response.data;
-            this.$router.go(0);
+            this.getFollowStatus();
           })
           .catch(err => {
             err.response.data
@@ -81,11 +79,27 @@ export default {
           .put(process.env.VUE_APP_FOLLOWER_URL + 'notifications/unmute', data)
           .then(response => {
             response.data;
-            this.$router.go(0);
+            this.getFollowStatus();
           })
           .catch(err => {
             err.response.data
             alert("Something went wrong!")
+          })
+    },
+    addClose() {
+      this.$http
+          .put(process.env.VUE_APP_CONTENT_URL + 'interaction/closeFriends/add/' + this.username)
+          .then(response => {
+            this.closeFriendStatus = response.data;
+            this.getClose();
+          })
+    },
+    removeClose() {
+      this.$http
+          .put(process.env.VUE_APP_CONTENT_URL + 'interaction/closeFriends/remove/' + this.username)
+          .then(response => {
+            this.closeFriendStatus = response.data;
+            this.getClose();
           })
     },
     block() {
@@ -93,6 +107,21 @@ export default {
     },
     unblock() {
       // TODO:
+    },
+    getFollowStatus() {
+      this.$http.get(process.env.VUE_APP_FOLLOWER_URL + 'interactions/' + this.username)
+          .then(response => {
+            this.status = response.data.following;
+            this.notifications = response.data.notifications;
+          })
+          .catch(err => (console.log(err.data)))
+    },
+    getClose() {
+      this.$http
+          .get(process.env.VUE_APP_CONTENT_URL + 'interaction/closeFriends/' + this.username)
+          .then(response => {
+            this.close = response.data === 'CLOSE_FRIENDS';
+          })
     }
   },
   computed: {
