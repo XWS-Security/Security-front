@@ -7,6 +7,11 @@
         </b-tab>
         <b-tab title="Likes">
           <b-card-text>Likes and dislikes section</b-card-text>
+          <p>Liked</p>
+          <liked-posts></liked-posts>
+          <hr>
+          <p>Disliked</p>
+          <disliked-posts></disliked-posts>
         </b-tab>
         <b-tab title="Comments">
           <b-card-text>Comments section</b-card-text>
@@ -18,10 +23,12 @@
 
 <script>
 import FollowRequests from "@/components/Nistagram/Notifications/FollowRequests";
+import LikedPosts from "@/components/Nistagram/Notifications/LikedPosts";
+import DislikedPosts from "@/components/Nistagram/Notifications/DislikedPosts";
 
 export default {
   name: "Notifications",
-  components: {FollowRequests}
+  components: {DislikedPosts, LikedPosts, FollowRequests}
 }
 </script>
 
