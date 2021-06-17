@@ -18,10 +18,10 @@
           </small>
           {{ post.about }}<br/>
 
-          <button class="btn btn-success mr-2" v-on:click="onLike()">
+          <button v-if="user === 'NistagramUser'" class="btn btn-success mr-2" v-on:click="onLike()">
             <b-icon-hand-thumbs-up></b-icon-hand-thumbs-up>
           </button>
-          <button class="btn btn-danger" v-on:click="onDislike()">
+          <button v-if="user === 'NistagramUser'" class="btn btn-danger" v-on:click="onDislike()">
             <b-icon-hand-thumbs-down></b-icon-hand-thumbs-down>
           </button>
           <br/>
@@ -30,9 +30,11 @@
         </div>
         <b-button @click="saveOrRemove" v-if="isSaveVisible">{{ favouritesButtonName }}</b-button>
         <hr>
-        <button class="btn btn-danger" v-on:click="setReportVisibility">Report</button>
+        <button v-if="user === 'NistagramUser'" class="btn btn-danger mr-2" v-on:click="setReportVisibility">Report</button>
+        <button v-if="user === 'Administrator'" class="btn btn-danger mr-2" v-on:click="removeContent">Remove Post</button>
+        <button v-if="user === 'Administrator'" class="btn btn-danger mr-2">Remove User</button>
         <hr>
-        <div>
+        <div v-if="user === 'NistagramUser'">
           <add-comment v-bind:post-id="id"></add-comment>
         </div>
         <div v-for="c in post.commentIds" v-bind:key="c">
@@ -139,6 +141,20 @@ export default {
 
     setReportVisibility() {
       this.reportVisible = !this.reportVisible;
+    },
+    removeContent() {
+      this.$http
+          .put(process.env.VUE_APP_CONTENT_URL + 'post/remove/' + this.id)
+          .then(response => {
+            console.log(response.data)
+          })
+    },
+    removeUser() {
+      this.$http
+          .put(process.env.VUE_APP_CONTENT_URL + 'profile/remove' + this.id)
+          .then(response => {
+            console.log(response.data)
+          })
     }
   },
 
@@ -151,6 +167,11 @@ export default {
         buttonName = "Save to favourites"
       }
       return buttonName;
+    },
+
+    user() {
+      let user = this.$store.state.userType;
+      return user;
     }
   }
 }
