@@ -94,7 +94,7 @@ export default {
 
     dispatch(type) {
       let router = this.$router;
-      if (type === 'InstagramUser') {
+      if (type === 'NistagramUser') {
         router.push('/instagram');
         return
       } else {
