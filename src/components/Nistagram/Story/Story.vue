@@ -36,7 +36,7 @@
                 href="">{{ tag }} </a>
             </span> <span v-if="s.story.location!=null"> at <a href=""> {{ s.story.location.name }} </a></span>
               <button v-if="user === 'NistagramUser'" class="btn btn-danger mr-2" @click="setReportVisibility">Report</button>
-              <button v-if="user === 'Administrator'" class="btn btn-danger mr-2">Remove Post</button>
+              <button v-if="user === 'Administrator'" class="btn btn-danger mr-2" @click="removeStory(s.story.id)">Remove Post</button>
               <button v-if="user === 'Administrator'" class="btn btn-danger mr-2">Remove User</button>
               <img v-if="s.mediatype==='image/jpeg'" class="item" v-bind:src="s.url"/>
               <video controls v-else class="item" v-bind:src="s.url" autoplay loop v-bind:muted="index!=selected"/>
@@ -157,10 +157,16 @@ export default {
           })
           .catch(err => (this.console.log(err.data)))
     },
-
     setReportVisibility() {
       this.reportVisible = !this.reportVisible;
     },
+    removeStory(id) {
+      this.$http
+          .put(process.env.VUE_APP_CONTENT_URL + 'story/remove/' + id)
+          .then(response => {
+            console.log(response.data)
+          })
+    }
   }
 }
 </script>
