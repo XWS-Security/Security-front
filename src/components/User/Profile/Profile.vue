@@ -115,6 +115,17 @@
                 <label for="public">Public</label>
                 <br>
               </div>
+              <div>
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="messagesEnabled" v-model="messagesEnabled">
+                  <label class="form-check-label" for="messagesEnabled">Receive messages from all users</label>
+                </div>
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="tagsEnabled" v-model="tagsEnabled">
+                  <label class="form-check-label" for="tagsEnabled">Allow users to tag you in their posts and
+                    stories</label>
+                </div>
+              </div>
               <div class="row">
                 <div class="col-sm-3"></div>
                 <div class="col-sm-9 text-secondary">
@@ -164,7 +175,9 @@ export default {
       uploadError: null,
       currentStatus: null,
       profilePicture: null,
-      userContent: {}
+      userContent: {},
+      messagesEnabled: false,
+      tagsEnabled: false
     }
   },
 
@@ -186,7 +199,8 @@ export default {
             this.about = response.data.about;
             this.phoneNumber = response.data.phoneNumber;
             this.profilePrivate = response.data.profilePrivate;
-
+            this.messagesEnabled = response.data.messagesEnabled
+            this.tagsEnabled = response.data.tagsEnabled
             this.getUserInfoContent();
           }).catch(err => {
         alert(err.response.data)
@@ -207,7 +221,9 @@ export default {
         surname: this.surname,
         phoneNumber: this.phoneNumber,
         about: this.about,
-        profilePrivate: this.profilePrivate
+        profilePrivate: this.profilePrivate,
+        messagesEnabled: this.messagesEnabled,
+        tagsEnabled: this.tagsEnabled
       }
 
       if (/[<>]/.test(this.email) || /[<>]/.test(this.name) || /[<>]/.test(this.surname) || /[<>]/.test(this.username)) {
