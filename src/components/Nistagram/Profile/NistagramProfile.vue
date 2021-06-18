@@ -9,6 +9,8 @@
         <h4>
           <div class="row">
             <div class="col-2 m-auto">{{ id }}</div>
+            <div v-if="verificationStatus==='VERIFIED'" class="col-10">
+              <span style="float: right" title="Verified"><b-icon icon="check-circle-fill" font-scale="1" variant="info"></b-icon></span></div>
             <div class="col-lg m-auto" v-if="userType === 'NistagramUser'">
               <interactions v-if="renderInteractions" v-bind:username="this.id"></interactions>
             </div>
@@ -52,13 +54,15 @@ export default {
       followersNum: 0,
       followingNum: 0,
       closeFriendStatus: 'USER_UNSIGNED',
-      renderInteractions: false
+      renderInteractions: false,
+      verificationStatus:''
     }
   },
   mounted() {
     this.getId();
     this.getUserInfo();
     this.getFollowingStats();
+    this.getVerificationStatus();
   },
   methods: {
     getId() {
@@ -78,6 +82,13 @@ export default {
           .then(response => {
             this.followersNum = response.data.followers;
             this.followingNum = response.data.following;
+          })
+          .catch(err => (console.log(err.data)))
+    },
+    getVerificationStatus(){
+      this.$http.get(process.env.VUE_APP_BACKEND_URL + 'verification/status/' + this.id)
+          .then(response => {
+            this.verificationStatus = response.data;
           })
           .catch(err => (console.log(err.data)))
     }
