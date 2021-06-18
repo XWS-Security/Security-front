@@ -16,6 +16,7 @@
         <ProfileSearchLink></ProfileSearchLink>
         <TestLink></TestLink>
         <ReportedLink v-if="user === 'Administrator'"></ReportedLink>
+        <ReportedStoriesLink></ReportedStoriesLink>
       </NavGroup>
     </NavBar>
     <h3>{{ user }}</h3>
@@ -40,10 +41,12 @@ import UploadContentLink from "@/components/NavBar/UploadContentLink";
 import SavedContentLink from "@/components/NavBar/SavedContentLink";
 import MyStoriesLink from "@/components/NavBar/MyStoriesLink";
 import ReportedLink from "@/components/NavBar/ReportedLink";
+import ReportedStoriesLink from "@/components/NavBar/ReportedStoriesLink";
 
 export default {
   name: 'App',
   components: {
+    ReportedStoriesLink,
     ReportedLink,
     MyStoriesLink,
     SavedContentLink,

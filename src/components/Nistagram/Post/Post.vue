@@ -130,7 +130,7 @@ export default {
     },
     sendReport() {
 
-      let reportData = {reason: this.reason, contentId: this.id}
+      let reportData = {reason: this.reason, contentId: this.id, reportType: 'POST'}
 
       this.$http.post(process.env.VUE_APP_CONTENT_URL + 'report/', reportData)
           .then(response => {
