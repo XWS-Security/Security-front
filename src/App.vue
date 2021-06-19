@@ -13,6 +13,8 @@
         <UploadContentLink v-if="user === 'NistagramUser'"></UploadContentLink>
         <SavedContentLink v-if="user === 'NistagramUser'"></SavedContentLink>
         <MyStoriesLink v-if="user === 'NistagramUser'"></MyStoriesLink>
+        <VerificationLink v-if="user === 'NistagramUser'"></VerificationLink>
+        <verification-list-link v-if="user === 'Administrator'"></verification-list-link>
         <ProfileSearchLink></ProfileSearchLink>
         <TestLink></TestLink>
         <ReportedLink v-if="user === 'Administrator'"></ReportedLink>
@@ -40,12 +42,16 @@ import NotificationsLink from "@/components/NavBar/NotificationsLink";
 import UploadContentLink from "@/components/NavBar/UploadContentLink";
 import SavedContentLink from "@/components/NavBar/SavedContentLink";
 import MyStoriesLink from "@/components/NavBar/MyStoriesLink";
+import VerificationLink from "@/components/NavBar/VerificationLink";
+import VerificationListLink from "@/components/NavBar/VerificationListLink";
 import ReportedLink from "@/components/NavBar/ReportedLink";
 import ReportedStoriesLink from "@/components/NavBar/ReportedStoriesLink";
 
 export default {
   name: 'App',
   components: {
+    VerificationListLink,
+    VerificationLink,
     ReportedStoriesLink,
     ReportedLink,
     MyStoriesLink,
