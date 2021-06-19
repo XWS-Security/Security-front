@@ -27,6 +27,7 @@ import ContentUpload from "./components/ContentUpload/ContentUpload";
 import Notifications from "@/components/Nistagram/Notifications/Notifications";
 import Favourites from "@/components/Nistagram/favourites/Favourites";
 import Verification from "@/components/Nistagram/Verification/Verification";
+import VerificationList from "@/components/Nistagram/Verification/VerificationList";
 import Reported from "@/components/Nistagram/Post/ReportedPosts";
 
 Vue.config.productionTip = false
@@ -57,6 +58,7 @@ const routes = [
     {path: '/contentUpload', component: ContentUpload},
     {path: '/favourites', component: Favourites},
     {path: '/verification', component: Verification},
+    {path: '/verification/list', component: VerificationList},
     {path: '/notifications', component: Notifications},
     {path: '/reportedPosts', component: Reported}
 ];

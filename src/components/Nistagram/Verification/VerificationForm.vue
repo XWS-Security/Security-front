@@ -14,7 +14,7 @@
       </div>
     </form>
     <hr>
-    <b-button @click="uploadContent()">Upload photo!</b-button>
+    <b-button @click="uploadContent()">Send</b-button>
 
     <!--SUCCESS-->
     <div v-if="isSuccess">

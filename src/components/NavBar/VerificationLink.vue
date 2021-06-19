@@ -1,6 +1,6 @@
 <template>
   <li class="nav-item active">
-    <router-link to="/story?&storiesType=my"><a class="nav-link" href="#">My Stories<span
+    <router-link to="/verification"><a class="nav-link" href="#">Verification<span
         class="sr-only">(current)</span></a>
     </router-link>
   </li>
@@ -8,9 +8,10 @@
 
 <script>
 export default {
-  name: "MyStoriesLink",
+name: "VerificationLink"
 }
 </script>
 
 <style scoped>
+
 </style>
