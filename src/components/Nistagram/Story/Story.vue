@@ -32,11 +32,27 @@
                   <button class="btn btn-danger" v-on:click="sendReport(s.story.id)">Send report</button>
                 </div>
               </b-jumbotron>
-              {{ formatDateWithHours(s.story.date) }} <span v-for="tag in s.story.tags" v-bind:key="tag"><a
-                href="">{{ tag }} </a>
-            </span> <span v-if="s.story.location!=null"> at <a href=""> {{ s.story.location.name }} </a></span>
-              <button v-if="user === 'NistagramUser'" class="btn btn-danger mr-2" @click="setReportVisibility">Report</button>
-              <button v-if="user === 'Administrator'" class="btn btn-danger mr-2" @click="removeStory(s.story.id)">Remove Post</button>
+              {{ formatDateWithHours(s.story.date) }}
+              <span v-for="tag in s.story.tags" v-bind:key="tag"><a href="">{{ tag }} </a></span>
+              <span v-if="s.story.location!=null"> at <a href=""> {{ s.story.location.name }} </a></span>
+              <div class="d-inline-flex justify-content-start m-auto">
+                <div class="align-middle">
+                  <small> Users in this post: </small>
+                </div>
+                <div class="align-middle px-1" v-for="(u, index) in s.story.taggedUsers" v-bind:key="index">
+                  <h5 class="m-auto"><a v-bind:href="'nistagramprofile?id=' + u" class="badge badge-pill badge-info">
+                    <div class="d-inline-flex justify-content-center flex-row m-auto">
+                      <div class="m-auto">{{ u }}</div>
+                    </div>
+                  </a>
+                  </h5>
+                </div>
+              </div>
+              <button v-if="user === 'NistagramUser'" class="btn btn-danger mr-2" @click="setReportVisibility">Report
+              </button>
+              <button v-if="user === 'Administrator'" class="btn btn-danger mr-2" @click="removeStory(s.story.id)">
+                Remove Post
+              </button>
               <button v-if="user === 'Administrator'" class="btn btn-danger mr-2">Remove User</button>
               <img v-if="s.mediatype==='image/jpeg'" class="item" v-bind:src="s.url"/>
               <video controls v-else class="item" v-bind:src="s.url" autoplay loop v-bind:muted="index!=selected"/>
