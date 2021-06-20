@@ -148,8 +148,8 @@ export default {
       post: '',
       closeFriends: '',
       highlights: '',
-      taggedUserOptions: ['milica', 'luka', 'zare'],
-      taggedUsers: ['vlado', 'vidoje'],
+      taggedUserOptions: [],
+      taggedUsers: [],
       taggedUserSelected: null,
       taggedUserDefaultOptionDisabled: true
     }
@@ -288,6 +288,17 @@ export default {
           })
     },
 
+    getTaggedUserOptions() {
+      this.$http
+          .get(process.env.VUE_APP_BACKEND_URL + 'profile/getAllUsers')
+          .then(response => {
+            this.taggedUserOptions = response.data.map(u => u.username);
+
+          }).catch(err => {
+        console.log(err)
+      });
+    },
+
     onTaggedUserSelected() {
       if (this.taggedUserSelected === null) return
       if (this.taggedUsers.indexOf(this.taggedUserSelected) === -1) {
@@ -307,6 +318,7 @@ export default {
   mounted() {
     this.reset();
     this.getLocations();
+    this.getTaggedUserOptions();
   },
 }
 </script>

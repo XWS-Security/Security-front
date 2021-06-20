@@ -11,12 +11,30 @@
                              :stories="false"></profile-picture>
             <a v-bind:href="'nistagramprofile?id=' + username"><h4>{{ username }}</h4></a><br/><br/>
           </div>
+
+          <h5>{{ post.about }}<br/></h5>
+
+          <div class="d-inline-flex justify-content-start m-auto">
+            <div class="align-middle">
+              <h5> Users in this post: </h5>
+            </div>
+            <div class="align-middle px-1" v-for="(u, index) in post.taggedUsers" v-bind:key="index">
+              <h5 class="m-auto"><a v-bind:href="'nistagramprofile?id=' + u" class="badge badge-pill badge-info">
+                <div class="d-inline-flex justify-content-center flex-row m-auto">
+                  <div class="m-auto">{{ u }}</div>
+                </div>
+              </a></h5>
+            </div>
+          </div>
+
+          <br/>
+
           <small>
             {{ parseDate(post.date) }} <span v-if="post.location!==null">at <a
               href="">{{ post.location.name }}</a></span><br/>
             <a v-for="t in post.tags" v-bind:key="t" href="/">{{ t }} </a>
           </small>
-          {{ post.about }}<br/>
+          <br/>
 
           <button v-if="user === 'NistagramUser'" class="btn btn-success mr-2" v-on:click="onLike()">
             <b-icon-hand-thumbs-up></b-icon-hand-thumbs-up>
@@ -30,8 +48,10 @@
         </div>
         <b-button @click="saveOrRemove" v-if="isSaveVisible">{{ favouritesButtonName }}</b-button>
         <hr>
-        <button v-if="user === 'NistagramUser'" class="btn btn-danger mr-2" v-on:click="setReportVisibility">Report</button>
-        <button v-if="user === 'Administrator'" class="btn btn-danger mr-2" v-on:click="removeContent">Remove Post</button>
+        <button v-if="user === 'NistagramUser'" class="btn btn-danger mr-2" v-on:click="setReportVisibility">Report
+        </button>
+        <button v-if="user === 'Administrator'" class="btn btn-danger mr-2" v-on:click="removeContent">Remove Post
+        </button>
         <button v-if="user === 'Administrator'" class="btn btn-danger mr-2">Remove User</button>
         <hr>
         <div v-if="user === 'NistagramUser'">
