@@ -29,36 +29,73 @@
 
         <div>
           <label>Location</label>
-          <select v-model="selectedLocation">
+          <b-select v-model="selectedLocation">
+            <template #first>
+              <b-form-select-option :value="null" disabled>Select location</b-form-select-option>
+            </template>
             <option v-bind:key="location.id" v-for="location in locations" :value="location.name">{{
                 location.name
               }}
             </option>
-          </select>
+          </b-select>
         </div>
 
         <hr>
 
-        <select v-model="post">
+        <b-select v-model="post">
+          <template #first>
+            <b-form-select-option :value="''" disabled>Select content type</b-form-select-option>
+          </template>
           <option value="Story">Story</option>
           <option selected value="Post">Post</option>
-        </select>
+        </b-select>
 
         <hr>
 
-        <select v-model="closeFriends">
+        <b-select v-model="closeFriends" v-if="post === 'Story'">
+          <template #first>
+            <b-form-select-option :value="''" disabled>Select who will be able to see your story
+            </b-form-select-option>
+          </template>
           <option value="Close">Close friends</option>
           <option selected value="All">All</option>
-        </select>
+        </b-select>
 
-        <hr>
+        <hr v-if="post === 'Story'">
 
-        <select v-model="highlights">
+        <b-select v-model="highlights" v-if="post === 'Story'">
+          <template #first>
+            <b-form-select-option :value="''" disabled>Select story type</b-form-select-option>
+          </template>
           <option value="Highlights">Highlights</option>
           <option selected value="Normal">Normal</option>
-        </select>
+        </b-select>
 
-        <hr>
+        <hr v-if="post === 'Story'">
+
+        <b-select v-model="taggedUserSelected" v-on:input="onTaggedUserSelected">
+          <template #first>
+            <b-form-select-option disabled :value="null">
+              Select user to tag
+            </b-form-select-option>
+          </template>
+          <option v-for="(u, index) in taggedUserOptions" :value="u" v-bind:key="index">{{ u }}</option>
+        </b-select>
+
+        <div class="d-flex flex-row">
+          <div class="p-2" v-for="(u, index) in taggedUsers" v-bind:key="index">
+            <h4><span class="badge badge-pill badge-info">
+              <div class="d-inline-flex justify-content-center flex-row m-auto">
+                <div class="m-auto">{{ u }}</div>
+                <div class="m-auto">
+                  <button class="btn btn-link text-light m-auto" v-on:click="onTaggedUserUnselected(u)">
+                  <b-icon-x></b-icon-x>
+                </button>
+                </div>
+              </div>
+            </span></h4>
+          </div>
+        </div>
 
         <b-button @click="uploadContent()">Upload</b-button>
 
@@ -71,7 +108,7 @@
           <a href="javascript:void(0)" @click="reset()">Upload again</a>
         </p>
         <ul class="list-unstyled">
-          <li v-for="item in uploadedFiles" v-bind:key="item">
+          <li v-for="(item, index) in uploadedFiles" v-bind:key="index">
             <img :src="item.url" class="img-responsive img-thumbnail" :alt="item.originalName">
           </li>
         </ul>
@@ -106,11 +143,15 @@ export default {
       uploadFieldName: 'photos',
       locations: [],
       selectedLocation: null,
-      about: null,
+      about: '',
       formData: null,
-      post: "",
-      closeFriends: false,
-      highlights: ""
+      post: '',
+      closeFriends: '',
+      highlights: '',
+      taggedUserOptions: ['milica', 'luka', 'zare'],
+      taggedUsers: ['vlado', 'vidoje'],
+      taggedUserSelected: null,
+      taggedUserDefaultOptionDisabled: true
     }
   },
 
@@ -172,11 +213,7 @@ export default {
     },
 
     uploadContent() {
-
-      console.log(this.post)
-
       if (this.post === "Post") {
-        console.log("Post")
         let description = []
         let tags = []
         description = this.about.split(" ")
@@ -187,9 +224,7 @@ export default {
           }
         }
 
-        console.log(this.selectedLocation)
-
-        let data = {about: this.about, tags: tags, location: this.selectedLocation};
+        let data = {about: this.about, tags: tags, location: this.selectedLocation, taggedUsers: this.taggedUsers};
 
         this.formData.append("obj", new Blob([JSON.stringify(data)], {
           type: "application/json"
@@ -218,8 +253,6 @@ export default {
           highlights = true;
         }
 
-        console.log(this.selectedLocation)
-
         let close = false;
         if (this.closeFriends === "All") {
           close = false;
@@ -227,7 +260,13 @@ export default {
           close = true;
         }
 
-        let data = {tags: tags, location: this.selectedLocation, closeFriends: close, highlights: highlights};
+        let data = {
+          tags: tags,
+          location: this.selectedLocation,
+          closeFriends: close,
+          highlights: highlights,
+          taggedUsers: this.taggedUsers
+        };
 
         this.formData.append("obj", new Blob([JSON.stringify(data)], {
           type: "application/json"
@@ -247,6 +286,21 @@ export default {
           .then(response => {
             this.locations = response.data;
           })
+    },
+
+    onTaggedUserSelected() {
+      if (this.taggedUserSelected === null) return
+      if (this.taggedUsers.indexOf(this.taggedUserSelected) === -1) {
+        this.taggedUsers.push(this.taggedUserSelected)
+      }
+      this.taggedUserSelected = null
+    },
+
+    onTaggedUserUnselected(user) {
+      // eslint-disable-next-line no-unused-vars
+      this.taggedUsers = this.taggedUsers.filter(function (value, index, arr) {
+        return value !== user;
+      });
     }
   },
 
