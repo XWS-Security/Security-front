@@ -233,7 +233,7 @@ export default {
         this.$http
             .post(process.env.VUE_APP_CONTENT_URL + 'post/uploadContent', this.formData)
             .then(response => {
-              console.log(response.data)
+              alert(response.data)
             })
 
       } else if (this.post === "Story") {
@@ -275,7 +275,7 @@ export default {
         this.$http
             .post(process.env.VUE_APP_CONTENT_URL + 'story/uploadContent', this.formData)
             .then(response => {
-              console.log(response.data)
+              alert(response.data)
             })
       }
     },
