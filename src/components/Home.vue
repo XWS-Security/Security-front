@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <img alt="Security img." src="../assets/security.png">
-    <h2>Welcome ADMIN to Security App!</h2>
+    <h2>Ništagram</h2>
   </div>
 </template>
 

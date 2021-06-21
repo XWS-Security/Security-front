@@ -20,7 +20,8 @@ export default {
     onSubmit() {
       let data = {postId: this.postId, text: this.text}
       this.$http.post(process.env.VUE_APP_CONTENT_URL + 'post/comment', data)
-          .then()
+          // eslint-disable-next-line no-unused-vars
+          .then(response => (this.$emit('commentAdded')))
           .catch(err => (this.console.log(err.data)))
     }
   }

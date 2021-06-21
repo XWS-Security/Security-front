@@ -9,8 +9,11 @@
         <h4>
           <div class="row">
             <div class="col-2 m-auto">{{ id }}</div>
-            <div v-if="verificationStatus==='VERIFIED'" class="col-10">
-              <span style="float: right" title="Verified"><b-icon icon="check-circle-fill" font-scale="1" variant="info"></b-icon></span></div>
+            <div class="col-3 m-auto" v-if="verificationStatus==='VERIFIED'">
+              <span style="float: right" title="Verified">
+                <b-icon icon="check-circle-fill" font-scale="1" variant="info"></b-icon>
+              </span>
+            </div>
             <div class="col-lg m-auto" v-if="userType === 'NistagramUser'">
               <interactions v-if="renderInteractions" v-bind:username="this.id"></interactions>
             </div>

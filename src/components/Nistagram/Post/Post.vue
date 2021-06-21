@@ -55,7 +55,7 @@
         <button v-if="user === 'Administrator'" class="btn btn-danger mr-2">Remove User</button>
         <hr>
         <div v-if="user === 'NistagramUser'">
-          <add-comment v-bind:post-id="id"></add-comment>
+          <add-comment v-bind:post-id="id" @commentAdded="getPostInfo"></add-comment>
         </div>
         <div v-for="c in post.commentIds" v-bind:key="c">
           <br>
@@ -139,13 +139,15 @@ export default {
     onLike() {
       let data = {postId: this.id}
       this.$http.put(process.env.VUE_APP_CONTENT_URL + 'post/like', data)
-          .then()
+          // eslint-disable-next-line no-unused-vars
+          .then(response => (this.getPostInfo()))
           .catch(err => (this.console.log(err.data)))
     },
     onDislike() {
       let data = {postId: this.id}
       this.$http.put(process.env.VUE_APP_CONTENT_URL + 'post/dislike', data)
-          .then()
+          // eslint-disable-next-line no-unused-vars
+          .then(response => (this.getPostInfo()))
           .catch(err => (this.console.log(err.data)))
     },
     sendReport() {
