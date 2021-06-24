@@ -10,6 +10,17 @@ export default {
   name: 'Home',
   props: {
     msg: String
+  },
+  mounted() {
+    let router = this.$router;
+    if (this.user === 'NistagramUser') {
+      router.push('/instagram');
+    }
+  },
+  computed: {
+    user() {
+      return this.$store.state.userType;
+    },
   }
 }
 </script>
