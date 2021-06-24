@@ -31,7 +31,7 @@
     </div>
 
     <hr>
-    <div class="d-flex align-content-around  justify-content-center flex-wrap light_blue">
+    <div class="d-flex align-content-around  justify-content-center flex-wrap light_blue" v-if="hasViewAccess">
       <post-image v-for="i in user.images" :key="i.imageName"
                   v-bind:imageName="i.imageName"
                   v-bind:id="i.postId"
@@ -58,7 +58,8 @@ export default {
       followingNum: 0,
       closeFriendStatus: 'USER_UNSIGNED',
       renderInteractions: false,
-      verificationStatus:''
+      verificationStatus: '',
+      hasViewAccess: false
     }
   },
   mounted() {
@@ -66,6 +67,7 @@ export default {
     this.getUserInfo();
     this.getFollowingStats();
     this.getVerificationStatus();
+    this.validateViewAccess();
   },
   methods: {
     getId() {
@@ -88,14 +90,25 @@ export default {
           })
           .catch(err => (console.log(err.data)))
     },
-    getVerificationStatus(){
+    getVerificationStatus() {
       this.$http.get(process.env.VUE_APP_BACKEND_URL + 'verification/status/' + this.id)
           .then(response => {
             this.verificationStatus = response.data;
           })
           .catch(err => (console.log(err.data)))
+    },
+    validateViewAccess() {
+      this.$http.get(process.env.VUE_APP_FOLLOWER_URL + 'users/hasViewAccess/' + this.id)
+          .then(response => {
+            this.hasViewAccess = response.data.accessAllowed
+          })
+          .catch(err => {
+            alert(err.response.data.message);
+            this.$router.push('/login');
+          })
     }
-  },
+  }
+  ,
   computed: {
     numberOfPosts: function () {
       if (this.user.images === undefined) {
@@ -103,15 +116,18 @@ export default {
       } else {
         return this.user.images.length
       }
-    },
+    }
+    ,
     userType() {
       let user = this.$store.state.userType;
       return user;
-    },
+    }
+    ,
     linkForHighlights: function () {
       return 'story?username=' + this.id + '&profileImage=' + this.user.profilePictureName + '&storyType=highlights';
     }
-  },
+  }
+  ,
 }
 </script>
 

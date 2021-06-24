@@ -32,10 +32,9 @@ export default {
           })
     },
     redirectToStories: function () {
-      if(this.stories==true){
-        this.$router.push('/story?username='+ this.username + '&profileImage=' + this.imageName)
-      }
-      else if(this.stories===false){
+      if (this.stories === true) {
+        this.$router.push('/story?username=' + this.username + '&profileImage=' + this.imageName)
+      } else if (this.stories === false) {
         this.$router.push('nistagramprofile?id=' + this.username)
       }
     },
@@ -51,7 +50,8 @@ img {
   margin: 3%;
   border-width: 44px;
 }
-.border-warning{
-  border-width:4px !important;
+
+.border-warning {
+  border-width: 4px !important;
 }
 </style>
