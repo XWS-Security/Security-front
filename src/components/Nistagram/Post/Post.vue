@@ -97,6 +97,7 @@ export default {
   },
   mounted() {
     this.getQueryParams();
+    this.validateViewAccess();
     this.getPostInfo();
     this.checkIsFavourite();
   },
@@ -176,6 +177,20 @@ export default {
           .put(process.env.VUE_APP_CONTENT_URL + 'profile/remove' + this.id)
           .then(response => {
             console.log(response.data)
+          })
+    },
+    validateViewAccess() {
+      this.$http.get(process.env.VUE_APP_FOLLOWER_URL + 'users/hasViewAccess/' + this.username)
+          .then(response => {
+            this.hasViewAccess = response.data.accessAllowed
+            if (!this.hasViewAccess) {
+              alert("Sorry, you don't have access to this user's content. Try sending them a follow request!")
+              this.$router.push('/nistagramprofile?id=' + this.username);
+            }
+          })
+          .catch(err => {
+            alert(err.response.data.message);
+            this.$router.push('/login');
           })
     }
   },

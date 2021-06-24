@@ -13,7 +13,7 @@
       </div>
       <hr style="background-color: #e2e8f0">
       <div class="row-cols-12">
-        <div class="col-lg-12">
+        <div class="col-lg-12" v-if="hasViewAccess">
           <b-carousel
               v-model="selected"
               id="carousel-1"
@@ -81,7 +81,8 @@ export default {
       profileImageName: null,
       profileImage: null,
       reportVisible: false,
-      reason: ''
+      reason: '',
+      hasViewAccess: false
     }
   },
   computed: {
@@ -120,8 +121,11 @@ export default {
       this.storiesType = urlParams.get('storiesType');
       if (this.storiesType === 'my') {
         this.getLoggedUserInfo();
-      } else
+        this.hasViewAccess = true;
+      } else {
+        this.validateViewAccess();
         this.getProfilePicture();
+      }
     },
     getLoggedUserInfo() {
       this.$http
@@ -181,6 +185,20 @@ export default {
           .put(process.env.VUE_APP_CONTENT_URL + 'story/remove/' + id)
           .then(response => {
             console.log(response.data)
+          })
+    },
+    validateViewAccess() {
+      this.$http.get(process.env.VUE_APP_FOLLOWER_URL + 'users/hasViewAccess/' + this.username)
+          .then(response => {
+            this.hasViewAccess = response.data.accessAllowed
+            if (!this.hasViewAccess) {
+              alert("Sorry, you don't have access to this user's content. Try sending them a follow request!")
+              this.$router.push('/nistagramprofile?id=' + this.username);
+            }
+          })
+          .catch(err => {
+            alert(err.response.data.message);
+            this.$router.push('/login');
           })
     }
   }
