@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <router-link to="/home"><a class="navbar-brand">Ništagram</a></router-link>
+      <router-link to="/"><a class="navbar-brand">Ništagram</a></router-link>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <slot></slot>
       </div>

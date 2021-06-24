@@ -1,16 +1,16 @@
 <template>
   <div>
     <b-dropdown variant="info" split v-bind:text="text" class="m-2" v-on:click="onClick">
-      <b-dropdown-item href="#" v-if="notifications === 'ON'" v-on:click="mute()">mute</b-dropdown-item>
-      <b-dropdown-item href="#" v-if="notifications === 'OFF'" v-on:click="unmute()">unmute</b-dropdown-item>
-      <b-dropdown-divider v-if="notifications !== null"></b-dropdown-divider>
+      <b-dropdown-item href="#" v-if="!muted && status === 'FOLLOWING'" v-on:click="mute()">mute</b-dropdown-item>
+      <b-dropdown-item href="#" v-if="muted && status === 'FOLLOWING'" v-on:click="unmute()">unmute</b-dropdown-item>
+      <b-dropdown-divider v-if="status === 'FOLLOWING'"></b-dropdown-divider>
       <b-dropdown-item href="#" v-if="close === 'NOT_CLOSE' && status === 'FOLLOWING'" v-on:click="addClose()">
         add close friend
       </b-dropdown-item>
       <b-dropdown-item href="#" v-if="close === 'CLOSE_FRIENDS'" v-on:click="removeClose()">
         remove close friend
       </b-dropdown-item>
-      <b-dropdown-divider v-if="notifications !== null"></b-dropdown-divider>
+      <b-dropdown-divider v-if="status === 'FOLLOWING'"></b-dropdown-divider>
       <b-dropdown-item href="#" variant="danger" v-if="!blocked" v-on:click="block()">block</b-dropdown-item>
       <b-dropdown-item href="#" variant="danger" v-if="blocked" v-on:click="unblock()">unblock</b-dropdown-item>
     </b-dropdown>
@@ -26,6 +26,7 @@ export default {
       status: 'FOLLOWING',
       notifications: null,
       blocked: false,
+      muted: false,
       close: ''
     }
   },
@@ -136,9 +137,10 @@ export default {
     getFollowStatus() {
       this.$http.get(process.env.VUE_APP_FOLLOWER_URL + 'interactions/' + this.username)
           .then(response => {
-            this.status = response.data.following;
-            this.notifications = response.data.notifications;
+            this.status = response.data.following
+            this.notifications = response.data.notifications
             this.blocked = response.data.blocked
+            this.muted = response.data.muted
           })
           .catch(err => (console.log(err.data)))
     },
