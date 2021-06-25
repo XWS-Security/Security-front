@@ -160,6 +160,17 @@ export default {
                 this.storiesWithImages.push(story)
               })
       )
+      this.posts.forEach(s =>
+          this.$http
+              .get(process.env.VUE_APP_CONTENT_URL + 'image/' + s.path, {
+                responseType: 'arraybuffer'
+              })
+              .then(response => {
+                let type = response.headers['content-type'];
+                let story = {url: _arrayBufferToBase64(response.data, type), mediatype: type, story: s};
+                this.storiesWithImages.push(story)
+              })
+      )
     },
     formatDateWithHours(date) {
       let d = new Date(date);

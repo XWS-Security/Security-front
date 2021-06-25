@@ -29,6 +29,8 @@ import Favourites from "@/components/Nistagram/favourites/Favourites";
 import Verification from "@/components/Nistagram/Verification/Verification";
 import VerificationList from "@/components/Nistagram/Verification/VerificationList";
 import Reported from "@/components/Nistagram/Post/ReportedPosts";
+import CreateCampaign from "@/components/Campaign/CreateCampaign";
+import UpdateCampaign from "@/components/Campaign/UpdateCampaign";
 
 Vue.config.productionTip = false
 
@@ -60,6 +62,8 @@ const routes = [
     {path: '/verification', component: Verification},
     {path: '/verification/list', component: VerificationList},
     {path: '/notifications', component: Notifications},
+    {path: '/campaign/create', component: CreateCampaign},
+    {path: '/campaign/update', component: UpdateCampaign},
     {path: '/reportedPosts', component: Reported}
 ];
 
