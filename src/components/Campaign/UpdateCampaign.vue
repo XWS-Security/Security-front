@@ -74,7 +74,9 @@ name: "UpdateCampaign",
           .then(response => {
             alert(response.data);
             this.getCampaigns();
-          })
+          }).catch(reason => {
+            alert(reason.response.data)
+      })
     },
   }
 }
