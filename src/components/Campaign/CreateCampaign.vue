@@ -107,10 +107,14 @@ export default {
         dto['exposureStart'] = this.exposureStart;
         dto['exposureEnd'] = this.exposureEnd;
       }
+      if(this.selectedContent===null || this.link===''){
+        alert("Please insert values into given fields.")
+        return
+      }
       this.$http
           .post(process.env.VUE_APP_CAMPAIGN_URL + 'campaign/', dto)
           .then(response => {
-            console.log(response.data);
+            alert(response.data);
           })
     }
   }
