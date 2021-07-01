@@ -119,8 +119,10 @@ export default {
       this.$http
           .post(process.env.VUE_APP_BACKEND_URL + 'register/', user)
           .then(response => {
-            response.data
-            alert("Activation link is sent to your email address.")
+            if (response.data.success)
+              alert("Activation link is sent to your email address.")
+            else
+              alert(response.data.message)
           }).catch(err => {
         alert(err.response.data)
       });
