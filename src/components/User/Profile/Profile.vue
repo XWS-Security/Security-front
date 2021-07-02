@@ -235,7 +235,11 @@ export default {
       this.$http
           .put(process.env.VUE_APP_BACKEND_URL + 'profile/updateProfileInfo', basicInfo)
           .then(response => {
-            alert(response.data);
+            if (response.data.success)
+              if (response.data.success)
+                alert("Your information is updated successfully!")
+              else
+                alert(response.data.message)
             this.$store.dispatch('logOut');
             this.$router.push("/");
           }).catch(err => {
@@ -271,7 +275,6 @@ export default {
     save(formData) {
       // upload data to the server
       this.currentStatus = STATUS_SAVING;
-      console.log(formData);
       upload(formData)
           .then(wait(1500)) // DEV ONLY: wait for 1.5s
           .then(x => {
