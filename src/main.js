@@ -32,6 +32,7 @@ import Reported from "@/components/Nistagram/Post/ReportedPosts";
 import CreateCampaign from "@/components/Campaign/CreateCampaign";
 import UpdateCampaign from "@/components/Campaign/UpdateCampaign";
 import SendHireRequest from "@/components/Campaign/SendHireRequest";
+import HireRequests from "@/components/Campaign/HireRequests";
 
 Vue.config.productionTip = false
 
@@ -66,6 +67,7 @@ const routes = [
     {path: '/campaign/create', component: CreateCampaign},
     {path: '/campaign/update', component: UpdateCampaign},
     {path: '/campaign/hire', component: SendHireRequest},
+    {path: '/campaign/hire/resolve', component: HireRequests},
     {path: '/reportedPosts', component: Reported}
 ];
 
