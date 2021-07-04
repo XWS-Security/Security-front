@@ -19,11 +19,12 @@
         <ProfileSearchLink></ProfileSearchLink>
         <TestLink></TestLink>
         <ReportedLink v-if="user === 'Administrator'"></ReportedLink>
+        <ReportedStoriesLink v-if="user === 'Administrator'"></ReportedStoriesLink>
         <AgentVerificationLink v-if="user === 'Administrator'"></AgentVerificationLink>
-        <ReportedStoriesLink></ReportedStoriesLink>
+        <ConversationsLink v-if="user === 'NistagramUser'"></ConversationsLink>
       </NavGroup>
     </NavBar>
-    <h3>{{ user }}</h3>
+<!--    <h3>{{ user }}</h3>-->
     <router-view></router-view>
   </div>
 </template>
@@ -50,11 +51,13 @@ import ReportedLink from "@/components/NavBar/ReportedLink";
 import ReportedStoriesLink from "@/components/NavBar/ReportedStoriesLink";
 import RegisterAgentLink from "./components/NavBar/RegisterAgentLink";
 import AgentVerificationLink from "./components/NavBar/AgentVerificationLink";
+import ConversationsLink from "@/components/NavBar/ConversationsLink";
 
 export default {
   name: 'App',
   components: {
     AgentVerificationLink,
+    ConversationsLink,
     VerificationListLink,
     VerificationLink,
     ReportedStoriesLink,

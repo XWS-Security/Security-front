@@ -35,6 +35,7 @@ import CreateCampaign from "@/components/Campaign/CreateCampaign";
 import UpdateCampaign from "@/components/Campaign/UpdateCampaign";
 import SendHireRequest from "@/components/Campaign/SendHireRequest";
 import HireRequests from "@/components/Campaign/HireRequests";
+import Conversations from "@/components/Messages/Conversations";
 
 Vue.config.productionTip = false
 
@@ -72,7 +73,8 @@ const routes = [
     {path: '/campaign/hire/resolve', component: HireRequests},
     {path: '/reportedPosts', component: Reported},
     {path: '/registerAgent', component: RegisterAgent},
-    {path: '/verifyAgent', component: AgentVerification}
+    {path: '/verifyAgent', component: AgentVerification},
+    {path: '/conversations', component: Conversations}
 ];
 
 const router = new VueRouter({
