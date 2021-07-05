@@ -5,7 +5,7 @@
         <li class="list-group-item">
           <span class="custom-control-inline">
               <h4 class="m-auto">Conversations</h4>
-              <button class="btn btn-outline-info rounded ml-3">
+              <button class="btn btn-outline-info rounded ml-3" v-on:click="onConversationSelected(0)">
                 <b-icon-plus></b-icon-plus>
               </button>
           </span>
@@ -16,7 +16,7 @@
         </li>
       </ul>
     </div>
-    <div class="col-8">
+    <div class="col-6">
       <new-conversation v-if="selectedConversationId === 0"></new-conversation>
       <conversation-view v-if="selectedConversationId !== 0" v-bind:id="selectedConversationId"></conversation-view>
     </div>
