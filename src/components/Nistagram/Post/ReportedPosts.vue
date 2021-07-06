@@ -5,7 +5,8 @@
                 v-bind:imageName="p.imageName"
                 v-bind:id="p.id"
                 v-bind:user="p.userId"
-                v-bind:profile-img="p.userProfileImageName"></post-image>
+                v-bind:profile-img="p.userProfileImageName"
+                clickable="true"></post-image>
   </div>
 </template>
 

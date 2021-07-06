@@ -13,7 +13,7 @@ export default {
   mounted() {
     this.getBase64(this.imageName);
   },
-  props: ['imageName', 'id', 'user', 'profileImg'],
+  props: ['imageName', 'id', 'user', 'profileImg', 'clickable'],
   data() {
     return {
       media: {mediatype: '', url: ''}
@@ -39,7 +39,8 @@ export default {
           })
     },
     openPost: function () {
-      if (this.user == undefined || this.profileImg == undefined) {
+      if (!this.clickable) return
+      if (this.user === undefined || this.profileImg === undefined) {
         this.$http
             .get(process.env.VUE_APP_CONTENT_URL + 'post/user/' + this.id)
             .then(response => {
@@ -50,7 +51,6 @@ export default {
       } else {
         this.$router.push("/post?id=" + this.id + '&username=' + this.user + '&profileImg=' + this.profileImg);
       }
-
     },
     getUserInfo() {
 

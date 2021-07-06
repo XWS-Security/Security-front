@@ -36,7 +36,8 @@
                   v-bind:imageName="i.imageName"
                   v-bind:id="i.postId"
                   v-bind:user="id"
-                  v-bind:profile-img="user.profilePictureName"></post-image>
+                  v-bind:profile-img="user.profilePictureName"
+                  clickable="true"></post-image>
     </div>
   </div>
 </template>
