@@ -27,7 +27,8 @@
       <hr>
       <div class="d-flex align-content-around  justify-content-center flex-wrap light_blue">
         <post-image v-for="(p,index) in posts" :key="index" v-bind:id="p.postId"
-                    v-bind:image-name="p.imageName"></post-image>
+                    v-bind:image-name="p.imageName"
+                    clickable="true"></post-image>
       </div>
     </b-jumbotron>
   </div>

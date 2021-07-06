@@ -74,6 +74,7 @@ export default {
     return {
       medias: {},
       stories: [],
+      posts: [],
       storiesWithImages: [],
       selected: 0,
       username: "",

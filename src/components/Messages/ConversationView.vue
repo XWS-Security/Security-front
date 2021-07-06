@@ -4,10 +4,14 @@
       <div v-if="currentUsername === m.sentBy" class="d-flex flex-row justify-content-end">
         <text-message v-if="m.type === 'TEXT'" v-bind:message="m"
                       v-bind:sent="currentUsername === m.sentBy"></text-message>
+        <content-message v-if="m.type === 'CONTENT'" v-bind:message="m"
+                         v-bind:sent="currentUsername === m.sentBy"></content-message>
       </div>
       <div v-if="currentUsername !== m.sentBy" class="d-flex flex-row justify-content-start">
         <text-message v-if="m.type === 'TEXT'" v-bind:message="m"
                       v-bind:sent="currentUsername === m.sentBy"></text-message>
+        <content-message v-if="m.type === 'CONTENT'" v-bind:message="m"
+                         v-bind:sent="currentUsername === m.sentBy"></content-message>
       </div>
     </div>
     <div class="input-group mt-auto">
@@ -21,10 +25,11 @@
 
 <script>
 import TextMessage from "@/components/Messages/TextMessage";
+import ContentMessage from "@/components/Messages/ContentMessage";
 
 export default {
   name: "ConversationView",
-  components: {TextMessage},
+  components: {ContentMessage, TextMessage},
   props: ["conversation"],
   watch: {
     // eslint-disable-next-line no-unused-vars
