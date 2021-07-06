@@ -50,6 +50,7 @@
               </div>
               <button v-if="user === 'NistagramUser'" class="btn btn-danger mr-2" @click="setReportVisibility">Report
               </button>
+              <share-content v-if="user === 'NistagramUser'" v-bind:content-id="stories[0].id"></share-content>
               <button v-if="user === 'Administrator'" class="btn btn-danger mr-2" @click="removeStory(s.story.id)">
                 Remove Post
               </button>
@@ -67,9 +68,11 @@
 <script>
 import {_arrayBufferToBase64} from "@/assets/js/HellperFunctions";
 import {formatDate} from "@/assets/js/HellperFunctions";
+import ShareContent from "@/components/Messages/ShareContent";
 
 export default {
   name: "Story",
+  components: {ShareContent},
   data() {
     return {
       medias: {},

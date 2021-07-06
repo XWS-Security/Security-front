@@ -39,9 +39,10 @@
           <button v-if="user === 'NistagramUser'" class="btn btn-success mr-2" v-on:click="onLike()">
             <b-icon-hand-thumbs-up></b-icon-hand-thumbs-up>
           </button>
-          <button v-if="user === 'NistagramUser'" class="btn btn-danger" v-on:click="onDislike()">
+          <button v-if="user === 'NistagramUser'" class="btn btn-danger mr-2" v-on:click="onDislike()">
             <b-icon-hand-thumbs-down></b-icon-hand-thumbs-down>
           </button>
+          <share-content v-if="user === 'NistagramUser'" v-bind:content-id="id"></share-content>
           <br/>
 
           <a><b>{{ post.likes }}</b> likes</a> <a><b>{{ post.dislikes }}</b> dislikes</a>
@@ -79,10 +80,11 @@ import ProfilePicture from "@/components/Nistagram/Profile/ProfilePicture";
 import {formatDate} from "@/assets/js/HellperFunctions";
 import Comment from "@/components/Nistagram/Post/Comment";
 import AddComment from "@/components/Nistagram/Post/AddComment";
+import ShareContent from "@/components/Messages/ShareContent";
 
 export default {
   name: "Post",
-  components: {AddComment, Comment, ProfilePicture, SlideShow},
+  components: {ShareContent, AddComment, Comment, ProfilePicture, SlideShow},
   data() {
     return {
       id: '',
@@ -152,7 +154,6 @@ export default {
           .catch(err => (this.console.log(err.data)))
     },
     sendReport() {
-
       let reportData = {reason: this.reason, contentId: this.id, reportType: 'POST'}
 
       this.$http.post(process.env.VUE_APP_CONTENT_URL + 'report/', reportData)
@@ -161,7 +162,6 @@ export default {
           })
           .catch(err => (this.console.log(err.data)))
     },
-
     setReportVisibility() {
       this.reportVisible = !this.reportVisible;
     },
