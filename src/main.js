@@ -29,6 +29,8 @@ import Favourites from "@/components/Nistagram/favourites/Favourites";
 import Verification from "@/components/Nistagram/Verification/Verification";
 import VerificationList from "@/components/Nistagram/Verification/VerificationList";
 import Reported from "@/components/Nistagram/Post/ReportedPosts";
+import RegisterAgent from "./components/Agent/RegisterAgent";
+import AgentVerification from "./components/Agent/AgentVerification";
 import CreateCampaign from "@/components/Campaign/CreateCampaign";
 import UpdateCampaign from "@/components/Campaign/UpdateCampaign";
 import SendHireRequest from "@/components/Campaign/SendHireRequest";
@@ -68,7 +70,9 @@ const routes = [
     {path: '/campaign/update', component: UpdateCampaign},
     {path: '/campaign/hire', component: SendHireRequest},
     {path: '/campaign/hire/resolve', component: HireRequests},
-    {path: '/reportedPosts', component: Reported}
+    {path: '/reportedPosts', component: Reported},
+    {path: '/registerAgent', component: RegisterAgent},
+    {path: '/verifyAgent', component: AgentVerification}
 ];
 
 const router = new VueRouter({

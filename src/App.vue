@@ -5,6 +5,7 @@
         <CreateCertificateLink v-if="user === 'Administrator'"></CreateCertificateLink>
         <ViewCertificatesLink v-if="user === 'Administrator'"></ViewCertificatesLink>
         <RegistrationLink v-if="user == null"></RegistrationLink>
+        <RegisterAgentLink v-if="user == null"></RegisterAgentLink>
         <LoginLink v-if="user == null"></LoginLink>
         <LogOutLink v-if="user !== null"></LogOutLink>
         <ChangePasswordLink v-if="user !== null"></ChangePasswordLink>
@@ -18,6 +19,7 @@
         <ProfileSearchLink></ProfileSearchLink>
         <TestLink></TestLink>
         <ReportedLink v-if="user === 'Administrator'"></ReportedLink>
+        <AgentVerificationLink v-if="user === 'Administrator'"></AgentVerificationLink>
         <ReportedStoriesLink></ReportedStoriesLink>
       </NavGroup>
     </NavBar>
@@ -46,10 +48,13 @@ import VerificationLink from "@/components/NavBar/VerificationLink";
 import VerificationListLink from "@/components/NavBar/VerificationListLink";
 import ReportedLink from "@/components/NavBar/ReportedLink";
 import ReportedStoriesLink from "@/components/NavBar/ReportedStoriesLink";
+import RegisterAgentLink from "./components/NavBar/RegisterAgentLink";
+import AgentVerificationLink from "./components/NavBar/AgentVerificationLink";
 
 export default {
   name: 'App',
   components: {
+    AgentVerificationLink,
     VerificationListLink,
     VerificationLink,
     ReportedStoriesLink,
@@ -67,6 +72,7 @@ export default {
     RegistrationLink,
     CreateCertificateLink,
     ViewCertificatesLink,
+    RegisterAgentLink,
     NavBar,
     NavGroup
   },
