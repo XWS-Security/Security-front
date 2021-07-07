@@ -35,7 +35,7 @@
               {{ formatDateWithHours(s.story.date) }}
               <span v-for="tag in s.story.tags" v-bind:key="tag"><a href="">{{ tag }} </a></span>
               <span v-if="s.story.location!=null"> at <a href=""> {{ s.story.location.name }} </a></span>
-              <div class="d-inline-flex justify-content-start m-auto">
+              <div class="d-inline-flex justify-content-start m-auto" v-if="s.story.taggedUsers.length > 0">
                 <div class="align-middle">
                   <small> Users in this post: </small>
                 </div>

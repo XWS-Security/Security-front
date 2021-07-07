@@ -1,10 +1,13 @@
 <template>
-  <div>
+  <div class="main-container">
     <small>
       <p v-bind:class="sent ? 'text-right' : 'text-left'">{{ message.sentBy }}</p>
     </small>
     <div v-bind:class="sent ? classSent : classReceived">
-      <h5>{{ message.text }}</h5>
+      <h5 class="text-left">{{ message.text }}</h5>
+      <small class="mt-auto">
+        <p v-bind:class="sent ? 'm-auto text-right' : 'm-auto text-left'">{{ message.sentAt }}</p>
+      </small>
     </div>
   </div>
 </template>
@@ -23,5 +26,7 @@ export default {
 </script>
 
 <style scoped>
-
+.main-container {
+  max-width: 50%;
+}
 </style>
