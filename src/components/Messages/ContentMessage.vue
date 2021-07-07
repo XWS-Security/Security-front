@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main-container">
     <small>
       <p v-bind:class="sent ? 'text-right' : 'text-left'">{{ message.sentBy }}</p>
     </small>
@@ -7,10 +7,16 @@
       <post-image v-bind:id="message.contentId" v-bind:imageName="contentInfo.contentPath"
                   v-bind:profile-img="contentInfo.profileImage" v-bind:user="contentInfo.username"
                   v-bind:clickable="false"></post-image>
+      <small class="mt-auto">
+        <p v-bind:class="sent ? 'm-auto text-right' : 'm-auto text-left'">{{ message.sentAt }}</p>
+      </small>
     </div>
     <div v-if="!contentInfo.hasAccess" v-bind:class="sent ? classSent : classReceived" v-on:click="onClick">
       <h5>Looks like you don't have access to this content. Try following the owner of this content by clicking
         here!</h5>
+      <small class="mt-auto">
+        <p v-bind:class="sent ? 'm-auto text-right' : 'm-auto text-left'">{{ message.sentAt }}</p>
+      </small>
     </div>
   </div>
 </template>
@@ -59,5 +65,7 @@ export default {
 </script>
 
 <style scoped>
-
+.main-container {
+  max-width: 50%;
+}
 </style>
