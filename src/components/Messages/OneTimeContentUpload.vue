@@ -78,10 +78,10 @@ export default {
 
       this.$http
           .post(process.env.VUE_APP_MESSAGING_URL + 'messages/oneTime', this.formData)
-          .then(response => {
-            response.data
-          })
+          // eslint-disable-next-line no-unused-vars
+          .then(response => (this.$emit('messageSent')))
           .catch(error => (alert(error.response.data)))
+      this.reset()
     },
     reset() {
       // reset form to initial state
