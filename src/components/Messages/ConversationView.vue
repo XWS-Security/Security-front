@@ -31,7 +31,8 @@
         <button class="input-group-text btn btn-light" v-on:click="onSubmit">Send</button>
       </div>
     </div>
-    <one-time-content-upload v-if="uploadDisplayed" v-bind:conversation-id="conversation.id"></one-time-content-upload>
+    <one-time-content-upload v-if="uploadDisplayed" v-bind:conversation-id="conversation.id"
+                             @messageSent="getMessages(false)"></one-time-content-upload>
   </div>
 </template>
 
@@ -62,19 +63,29 @@ export default {
     }
   },
   mounted() {
-    this.$http
-        .get(process.env.VUE_APP_MESSAGING_URL + 'messages/' + this.conversation.id)
-        .then(response => (this.messages = response.data))
+    this.getMessages()
     this.$http
         .get(process.env.VUE_APP_BACKEND_URL + 'profile/username')
         .then(response => (this.currentUsername = response.data))
   },
   methods: {
+    getMessages(timeout = true) {
+      this.$http
+          .get(process.env.VUE_APP_MESSAGING_URL + 'messages/' + this.conversation.id)
+          .then(response => (this.messages = response.data))
+      if (timeout) setTimeout(this.getMessages, 5000)
+    },
     onSubmit() {
+      if (this.text == null || this.text === '') return
       let data = {text: this.text, conversationId: this.conversation.id}
       this.$http
           .post(process.env.VUE_APP_MESSAGING_URL + 'messages/text', data)
-          .then(response => (this.messages = response.data))
+          // eslint-disable-next-line no-unused-vars
+          .then(response => {
+            this.text = ''
+            this.getMessages(false)
+          })
+          .catch(error => (alert(error.response.data)))
     },
     onAttachFile() {
       this.uploadDisplayed = !this.uploadDisplayed
