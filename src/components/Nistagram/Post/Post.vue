@@ -3,6 +3,7 @@
     <div class="row">
       <div class="col" style="background-color: #2e2e2e">
         <slide-show v-bind:postId="id"></slide-show>
+        <b-button v-if="campaignId!==null" block variant="info" size="sm">Visit add</b-button>
       </div>
       <div class="col">
         <div>
@@ -94,7 +95,8 @@ export default {
       isFavourite: false,
       isSaveVisible: false,
       reason: '',
-      reportVisible: false
+      reportVisible: false,
+      campaignId: null
     }
   },
   mounted() {
@@ -109,6 +111,7 @@ export default {
       this.id = urlParams.get('id');
       this.profileImage = urlParams.get('profileImg');
       this.username = urlParams.get('username');
+      this.campaignId = urlParams.get('campaignId');
     },
     getPostInfo() {
       this.$http

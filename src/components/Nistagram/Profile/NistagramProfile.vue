@@ -29,8 +29,26 @@
         </b-button>
       </div>
     </div>
-
     <hr>
+    <div class="d-flex align-content-around  justify-content-center flex-wrap light_blue" v-if="hasViewAccess">
+      <post-image v-for="a in oneTimeAdds" :key="a.campaignId"
+                  v-bind:id="a.contentId"
+                  v-bind:user="id"
+                  v-bind:one-time=true
+                  v-bind:campaign-id="a.campaignId"
+                  v-bind:profile-img="user.profilePictureName"
+                  clickable="true"></post-image>
+    </div>
+    <div class="d-flex align-content-around  justify-content-center flex-wrap light_blue" v-if="hasViewAccess">
+      <post-image v-for="a in continuous" :key="a.campaignId"
+                  v-bind:id="a.contentId"
+                  v-bind:user="id"
+                  v-bind:one-time=false
+                  v-bind:campaign-id="a.campaignId"
+                  v-bind:profile-img="user.profilePictureName"
+                  clickable="true"></post-image>
+    </div>
+    <hr v-if="oneTimeAdds.length!==0 || continuous.length!==0 ">
     <div class="d-flex align-content-around  justify-content-center flex-wrap light_blue" v-if="hasViewAccess">
       <post-image v-for="i in user.images" :key="i.imageName"
                   v-bind:imageName="i.imageName"
@@ -60,7 +78,9 @@ export default {
       closeFriendStatus: 'USER_UNSIGNED',
       renderInteractions: false,
       verificationStatus: '',
-      hasViewAccess: false
+      hasViewAccess: false,
+      oneTimeAdds:[],
+      continuous:[],
     }
   },
   mounted() {
@@ -69,6 +89,7 @@ export default {
     this.getFollowingStats();
     this.getVerificationStatus();
     this.validateViewAccess();
+    this.getAdds();
   },
   methods: {
     getId() {
@@ -81,6 +102,25 @@ export default {
           .get(process.env.VUE_APP_CONTENT_URL + 'profile/' + this.id)
           .then(response => {
             this.user = response.data
+          })
+    },
+    getAdds(){
+      this.getContinuous();
+      this.getOneTime();
+    },
+    getOneTime(){
+      this.$http
+          .post(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/onetime/profile', {currentMoment:new Date(), agentAccountUsername:this.id})
+          .then(response => {
+            this.oneTimeAdds.push.apply(this.oneTimeAdds, response.data);
+            setTimeout(this.getOneTime, 60000);
+          })
+    },
+    getContinuous(){
+      this.$http
+          .get(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/continuous/profile/' + this.id)
+          .then(response => {
+            this.continuous.push.apply(this.continuous, response.data);
           })
     },
     getFollowingStats() {
