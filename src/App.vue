@@ -22,9 +22,10 @@
         <ReportedStoriesLink v-if="user === 'Administrator'"></ReportedStoriesLink>
         <AgentVerificationLink v-if="user === 'Administrator'"></AgentVerificationLink>
         <ConversationsLink v-if="user === 'NistagramUser'"></ConversationsLink>
+        <ManageTokenLink v-if="isAgent"></ManageTokenLink>
       </NavGroup>
     </NavBar>
-<!--    <h3>{{ user }}</h3>-->
+    <!--    <h3>{{ user }}</h3>-->
     <router-view></router-view>
   </div>
 </template>
@@ -52,10 +53,12 @@ import ReportedStoriesLink from "@/components/NavBar/ReportedStoriesLink";
 import RegisterAgentLink from "./components/NavBar/RegisterAgentLink";
 import AgentVerificationLink from "./components/NavBar/AgentVerificationLink";
 import ConversationsLink from "@/components/NavBar/ConversationsLink";
+import ManageTokenLink from "@/components/NavBar/ManageTokenLink";
 
 export default {
   name: 'App',
   components: {
+    ManageTokenLink,
     AgentVerificationLink,
     ConversationsLink,
     VerificationListLink,
@@ -93,6 +96,10 @@ export default {
       let user = this.$store.state.userType;
       return user;
     },
+    isAgent() {
+      let user = this.$store.state;
+      return user.userType === 'NistagramUser' && user.agent
+    }
   }
   ,
 }

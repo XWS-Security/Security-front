@@ -10,6 +10,7 @@ export const store = new Vuex.Store({
         accessToken: null,
         expiresIn: null,
         userType: null,
+        agent: false,
         canChange: true
     },
     getters: {
@@ -37,6 +38,7 @@ export const store = new Vuex.Store({
             state.userType = null;
             state.accessToken = null;
             state.expiresIn = null;
+            state.agent = false;
             state.canChange = true;
         },
 
@@ -99,6 +101,7 @@ function assignData(state, tokenData) {
     state.userType = tokenData.userType;
     state.accessToken = tokenData.accessToken;
     state.expiresIn = parseInt(tokenData.expiresIn, 10);
+    state.agent = tokenData.agent
 }
 
 function loadFromSessionStorage() {
