@@ -10,8 +10,17 @@ export default {
 
   methods: {
     test() {
-      this.$http
+      /*this.$http
           .get(process.env.VUE_APP_BACKEND_URL + 'followerMicroservice/hitMicroservice')
+          .then(response => {
+            response.data
+            alert("Has authority!")
+          }).catch(err => {
+        alert(err.response.data)
+      });*/
+
+      this.$http
+          .post(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/onetime' , {currentMoment:new Date()})
           .then(response => {
             response.data
             alert("Has authority!")
