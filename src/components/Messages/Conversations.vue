@@ -12,7 +12,8 @@
         </li>
         <li v-bind:class="selectedConversation === c ? selected : notSelected" v-for="(c, index) in conversations"
             v-bind:key="index" v-on:click="onConversationSelected(c)">
-          <conversation-small v-bind:conversation="c" v-bind:selected="selectedConversation === c"></conversation-small>
+          <conversation-small v-bind:conversation="c" v-bind:selected="selectedConversation === c"
+                              v-on:conversationEdited="getConversations(false)"></conversation-small>
         </li>
       </ul>
     </div>
