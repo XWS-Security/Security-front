@@ -16,13 +16,13 @@
       <label>Select content:</label><br>
       <label>Posts:</label><br>
       <div class="d-flex align-content-around  justify-content-center flex-wrap light_blue">
-        <selected-image v-for="post in posts" v-bind:name="post.imageName" v-bind:key="post.id" @click.native="select(post.id)" v-bind:selected="isSelected(post.id)"></selected-image>
+        <selected-image v-for="post in posts" v-bind:name="post.imageName" v-bind:key="post.id" @click.native="select(post.id, true)" v-bind:selected="isSelected(post.id)"></selected-image>
       </div>
 
       <label>Stories:</label><br>
       <div class="d-flex align-content-around  justify-content-center flex-wrap light_blue">
         <selected-image v-for="story in stories" v-bind:name="story.path" v-bind:key="story.id"
-                        @click.native="select(story.id)" v-bind:selected="isSelected(story.id)"></selected-image>
+                        @click.native="select(story.id, false)" v-bind:selected="isSelected(story.id)"></selected-image>
       </div>
       <hr>
       <div>
@@ -32,7 +32,7 @@
       </div>
       <hr>
       <div v-if="oneTime==='true'">
-        Exposure date: <input type="date" v-model="exposureDate">
+        Exposure date: <input type="datetime-local" v-model="exposureDate">
       </div>
       <div v-else>
         Exposure start: <input type="date" v-model="exposureStart"> <br>
@@ -64,10 +64,11 @@ export default {
         {value: 'Female', text: 'Female'},
         {value: 'Both', text: 'Both'},
       ],
-      exposureDate: null,
-      exposureStart: null,
-      exposureEnd: null,
-      selectedContent: null
+      exposureDate: new Date(),
+      exposureStart: new Date(),
+      exposureEnd: new Date(),
+      selectedContent: null,
+      isPost:false,
     }
   },
   mounted() {
@@ -92,12 +93,12 @@ export default {
     isSelected(id) {
       return id === this.selectedContent;
     },
-    select(id) {
-      //console.log(id);
+    select(id, isPost) {
+      this.isPost = isPost;
       this.selectedContent = id;
     },
     createCampaign() {
-      var dto = {'maxAge': this.maxAge, 'minAge': this.minAge, 'gender': this.selectedGender, 'link': this.link, 'contentId':this.selectedContent};
+      var dto = {'maxAge': this.maxAge, 'minAge': this.minAge, 'gender': this.selectedGender, 'link': this.link, 'contentId':this.selectedContent, 'post':this.isPost};
       if (this.oneTime === 'true') {
         dto['oneTime'] = true;
         dto['exposureDate'] = this.exposureDate;
