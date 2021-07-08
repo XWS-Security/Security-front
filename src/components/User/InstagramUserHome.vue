@@ -2,16 +2,16 @@
   <div class="row">
     <div class="col-1"></div>
     <div class="col-8">
-      <div class="row" v-for="(a, index) in advertisements" v-bind:key="index">
+      <div v-for="(a, index) in advertisements" v-bind:key="index">
         <advertisement class="my-3" v-bind:content-id="a.contentId"
                        v-bind:agent-account-username="a.agentAccountUsername"
                        v-bind:advertisement-link="a.link" v-bind:campaign-id="a.campaignId"
                        one-time="true"></advertisement>
       </div>
-      <div class="row">
+      <div>
         <hr>
       </div>
-      <div class="row" v-for="(c, index) in content" v-bind:key="index">
+      <div v-for="(c, index) in content" v-bind:key="index">
         <subscribed-content class="my-3" v-bind:content-id="c.postId" v-bind:username="c.username"
                             v-bind:profile-image="c.profileImage"></subscribed-content>
       </div>
