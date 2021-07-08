@@ -66,7 +66,8 @@ export default {
       let data = this.selectedUsers.map(u => u.username)
       this.$http
           .post(process.env.VUE_APP_MESSAGING_URL + "conversations/", data)
-          .then(response => (response.data))
+          // eslint-disable-next-line no-unused-vars
+          .then(response => (this.$emit('conversationStarted')))
           .catch(error => (alert(error.response.data)))
     },
     onUserSelected() {

@@ -17,8 +17,10 @@
       </ul>
     </div>
     <div class="col-6">
-      <new-conversation v-if="selectedConversation === null"></new-conversation>
-      <conversation-view v-if="selectedConversation !== null" v-bind:conversation="selectedConversation"></conversation-view>
+      <new-conversation v-if="selectedConversation === null"
+                        v-on:conversationStarted="getConversations(false)"></new-conversation>
+      <conversation-view v-if="selectedConversation !== null"
+                         v-bind:conversation="selectedConversation"></conversation-view>
     </div>
   </div>
 </template>
@@ -40,13 +42,17 @@ export default {
     }
   },
   mounted() {
-    this.$http
-        .get(process.env.VUE_APP_MESSAGING_URL + 'conversations/')
-        .then(response => {
-          this.conversations = response.data
-        })
+    this.getConversations()
   },
   methods: {
+    getConversations(timeout = true) {
+      this.$http
+          .get(process.env.VUE_APP_MESSAGING_URL + 'conversations/')
+          .then(response => {
+            this.conversations = response.data
+          })
+      if (timeout) setTimeout(this.getConversations, 5000)
+    },
     onConversationSelected(conversation) {
       this.selectedConversation = conversation
     }
