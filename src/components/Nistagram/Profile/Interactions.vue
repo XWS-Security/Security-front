@@ -13,6 +13,9 @@
       <b-dropdown-divider v-if="status === 'FOLLOWING'"></b-dropdown-divider>
       <b-dropdown-item href="#" variant="danger" v-if="!blocked" v-on:click="block()">block</b-dropdown-item>
       <b-dropdown-item href="#" variant="danger" v-if="blocked" v-on:click="unblock()">unblock</b-dropdown-item>
+      <b-dropdown-divider></b-dropdown-divider>
+      <b-dropdown-item href="#" variant="danger" v-on:click="turnOffNotifications()">turn off notifications</b-dropdown-item>
+      <b-dropdown-item href="#" variant="danger" v-on:click="turnOnNotifications()">turn on notifications</b-dropdown-item>
     </b-dropdown>
   </div>
 </template>
@@ -150,6 +153,20 @@ export default {
           .then(response => {
             this.close = response.data;
           })
+    },
+
+    turnOnNotifications() {
+      let notificationDto = { 'username': this.username};
+
+      this.$http
+          .put(process.env.VUE_APP_CONTENT_URL + 'notification/contentAdd', notificationDto)
+    },
+
+    turnOffNotifications() {
+      let notificationDto = { 'username': this.username};
+
+      this.$http
+          .put(process.env.VUE_APP_CONTENT_URL + 'notification/contentRemove', notificationDto)
     }
   },
   computed: {
