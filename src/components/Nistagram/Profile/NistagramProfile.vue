@@ -1,7 +1,7 @@
 <template>
   <div style="margin: 1% 20%">
     <div class="d-flex align-content-around justify-content-left flex-wrap light_blue">
-      <profile-picture v-bind:imageName="user.profilePictureName" v-bind:stories="user.hasStories"
+      <profile-picture v-bind:imageName="user.profilePictureName" v-bind:stories="hasStories"
                        v-bind:username="id"></profile-picture>
       <br>
       <div>
@@ -101,6 +101,7 @@ export default {
       hasViewAccess: false,
       oneTimeAdds:[],
       continuous:[],
+      hasStories: false
     }
   },
   mounted() {
@@ -110,8 +111,17 @@ export default {
     this.getVerificationStatus();
     this.validateViewAccess();
     this.getAdds();
+
   },
   methods: {
+    checkIfStoriesExists(){
+      this.$http
+          .post(process.env.VUE_APP_CAMPAIGN_URL  + 'advertisement/hasAds', {currentMoment:new Date(), agentAccountUsername:this.id})
+          .then(response => {
+            this.hasStories = response.data || this.user.hasStories;
+            setTimeout(this.checkIfStoriesExists, 20000)
+          })
+    },
     getId() {
       const urlParams = new URLSearchParams(window.location.search);
       this.id = urlParams.get('id');
@@ -122,6 +132,7 @@ export default {
           .get(process.env.VUE_APP_CONTENT_URL + 'profile/' + this.id)
           .then(response => {
             this.user = response.data
+            this.checkIfStoriesExists();
           })
     },
     getAdds(){
