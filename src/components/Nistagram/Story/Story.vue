@@ -23,6 +23,42 @@
               background="#2e2e2e"
               img-height="800"
               style="text-shadow: 1px 1px 2px #333">
+            <b-carousel-slide v-for="(s, index) in advertStoriesWithImages" v-bind:key="index + 'A'" img-blank
+                              img-alt="Blank image">
+
+              <b-jumbotron v-if="reportVisible">
+                <textarea class="form-control" type="text" placeholder="Report reason" v-model="reason"></textarea>
+                <div class="input-group-append">
+                  <button class="btn btn-danger" v-on:click="sendReport(s.story.id)">Send report</button>
+                </div>
+              </b-jumbotron>
+              {{ formatDateWithHours(s.story.date) }}
+              <span v-for="tag in s.story.tags" v-bind:key="tag"><a href="">{{ tag }} </a></span>
+              <span v-if="s.story.location!=null"> at <a href=""> {{ s.story.location.name }} </a></span>
+              <div class="d-inline-flex justify-content-start m-auto" v-if="s.story.taggedUsers.length > 0">
+                <div class="align-middle">
+                  <small> Users in this post: </small>
+                </div>
+                <div class="align-middle px-1" v-for="(u, index) in s.story.taggedUsers" v-bind:key="index">
+                  <h5 class="m-auto"><a v-bind:href="'nistagramprofile?id=' + u" class="badge badge-pill badge-info">
+                    <div class="d-inline-flex justify-content-center flex-row m-auto">
+                      <div class="m-auto">{{ u }}</div>
+                    </div>
+                  </a>
+                  </h5>
+                </div>
+              </div>
+              <button v-if="user === 'NistagramUser'" class="btn btn-danger mr-2" @click="setReportVisibility">Report
+              </button>
+              <share-content v-if="user === 'NistagramUser'" v-bind:content-id="stories[0].id"></share-content>
+              <button v-if="user === 'Administrator'" class="btn btn-danger mr-2" @click="removeStory(s.story.id)">
+                Remove Post
+              </button>
+              <button v-if="user === 'Administrator'" class="btn btn-danger mr-2">Remove User</button>
+              <img v-if="s.mediatype==='image/jpeg'" class="item" v-bind:src="s.url"/>
+              <video controls v-else class="item" v-bind:src="s.url" autoplay loop v-bind:muted="index!=selected"/>
+              <b-button variant="info" block>Visit addvertisement</b-button>
+            </b-carousel-slide>
             <b-carousel-slide v-for="(s, index) in storiesWithImages" v-bind:key="index" img-blank
                               img-alt="Blank image">
 
@@ -79,6 +115,7 @@ export default {
       stories: [],
       posts: [],
       storiesWithImages: [],
+      advertStoriesWithImages:[],
       selected: 0,
       username: "",
       storiesType: "",
@@ -109,8 +146,93 @@ export default {
   mounted() {
     this.getProfileData();
     this.getStories();
+    this.getAdds();
   },
   methods: {
+    getAdds(){
+      this.getAgentsOneTimeAds();
+      this.getAgentsContinuousAds();
+      this.checkIfInfluencer();
+    },
+    checkIfInfluencer(){
+      this.$http
+          .get(process.env.VUE_APP_BACKEND_URL  + 'verification/isInfluencer/' + this.username)
+          .then(response => {
+            if(response.data){
+              this.getInfluencerContinuousAds();
+              this.getInfluencerOneTimeAds();
+            }
+          })
+    },
+    //////////////////////////////////
+    addListOfAdds(listOfAds){
+      listOfAds.forEach(ad=>
+          {
+            this.$http
+                .get(process.env.VUE_APP_CONTENT_URL  + 'story/specific/' + ad.contentId)
+                .then(response => {
+                  this.getAddImage(response.data, ad.campaignId, ad.link);
+                })
+          }
+      )
+    },
+    getAddImage(storyParam, campaignId, link){
+
+          this.$http
+              .get(process.env.VUE_APP_CONTENT_URL + 'image/' + storyParam.path, {
+                responseType: 'arraybuffer'
+              })
+              .then(response => {
+                let type = response.headers['content-type'];
+                let story = {url: _arrayBufferToBase64(response.data, type), mediatype: type, story: storyParam, campaignId:campaignId, link:link};
+                this.advertStoriesWithImages.push(story)
+              });
+    },
+    seeAdvertisements(campaigns){
+      campaigns.forEach(campaign=>{
+        this.$http
+            .put(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/onetime/see/' + campaign.campaignId)
+            .then(response => {
+              console.log(response)
+            })
+            .catch(err => (console.log(err)));
+      })
+    },
+    getInfluencerOneTimeAds(){
+      this.$http
+          .post(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/story/onetime/influencer', {currentMoment:new Date(), agentAccountUsername:this.username})
+          .then(response => {
+            this.addListOfAdds(response.data);
+            this.seeAdvertisements(response.data);
+            setTimeout(this.getInfluencerOneTimeAds, 60000)
+          })
+          .catch(err => (console.log(err)));
+    },
+    getAgentsOneTimeAds(){
+      this.$http
+          .post(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/story/onetime', {currentMoment:new Date(), agentAccountUsername:this.username})
+          .then(response => {
+            this.addListOfAdds(response.data);
+            this.seeAdvertisements(response.data);
+            setTimeout(this.getAgentsOneTimeAds, 60000)
+          })
+          .catch(err => (console.log(err)));
+    },
+    getInfluencerContinuousAds(){
+      this.$http
+          .get(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/story/continuous/influencer/' + this.username)
+          .then(response => {
+            this.addListOfAdds(response.data);
+          })
+    },
+    getAgentsContinuousAds(){
+      this.$http
+          .get(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/story/continuous/' + this.username)
+          .then(response => {
+            this.addListOfAdds(response.data);
+          })
+    },
+    ////////////////////////////////////
     getStories() {
       this.$http
           .get(this.linkForGettingStories)

@@ -23,6 +23,10 @@
         <AgentVerificationLink v-if="user === 'Administrator'"></AgentVerificationLink>
         <ConversationsLink v-if="user === 'NistagramUser'"></ConversationsLink>
         <ManageTokenLink v-if="isAgent"></ManageTokenLink>
+        <AcceptHireRequestLink v-if="user === 'NistagramUser'"></AcceptHireRequestLink>
+        <HireInfluencerLink v-if="isAgent"></HireInfluencerLink>
+        <MakeCampaignLink v-if="isAgent"></MakeCampaignLink>
+        <UpdateCampaign v-if="isAgent"></UpdateCampaign>
       </NavGroup>
     </NavBar>
     <!--    <h3>{{ user }}</h3>-->
@@ -54,10 +58,18 @@ import RegisterAgentLink from "./components/NavBar/RegisterAgentLink";
 import AgentVerificationLink from "./components/NavBar/AgentVerificationLink";
 import ConversationsLink from "@/components/NavBar/ConversationsLink";
 import ManageTokenLink from "@/components/NavBar/ManageTokenLink";
+import AcceptHireRequestLink from "@/components/NavBar/AcceptHireRequestLink";
+import HireInfluencerLink from "@/components/NavBar/HireInfluencerLink";
+import MakeCampaignLink from "@/components/NavBar/MakeCampaignLink";
+import UpdateCampaign from "@/components/Campaign/UpdateCampaign";
 
 export default {
   name: 'App',
   components: {
+    UpdateCampaign,
+    MakeCampaignLink,
+    HireInfluencerLink,
+    AcceptHireRequestLink,
     ManageTokenLink,
     AgentVerificationLink,
     ConversationsLink,
