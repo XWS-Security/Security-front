@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col" style="background-color: #2e2e2e">
         <slide-show v-bind:postId="id"></slide-show>
-        <b-button v-if="campaignId!==null" block variant="info" size="sm">Visit add</b-button>
+        <b-button v-if="campaignId!==null" block variant="info" size="sm" @click="getLink()">Visit add</b-button>
       </div>
       <div class="col">
         <div>
@@ -96,7 +96,8 @@ export default {
       isSaveVisible: false,
       reason: '',
       reportVisible: false,
-      campaignId: null
+      campaignId: null,
+      influencerUsername:'',
     }
   },
   mounted() {
@@ -106,12 +107,30 @@ export default {
     this.checkIsFavourite();
   },
   methods: {
+    getLink(){
+      this.$http
+          .get(process.env.VUE_APP_CAMPAIGN_URL  + 'advertisement/' + this.campaignId)
+          .then(response => {
+            let link=response.data.link;
+            this.goToLink(link);
+          })
+    },
+    goToLink(link){
+      this.$http
+          .put(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/click/' + this.campaignId + '/' + this.influencerUsername)
+          .then(response => {
+            console.log(response.data);
+            window.location.href= link + '&username=' + this.influencerUsername + '&content=' + this.id;
+          })
+    },
     getQueryParams() {
       const urlParams = new URLSearchParams(window.location.search);
       this.id = urlParams.get('id');
       this.profileImage = urlParams.get('profileImg');
       this.username = urlParams.get('username');
       this.campaignId = urlParams.get('campaignId');
+      this.influencerUsername = urlParams.get('influencerUsername');
+      this.link = urlParams.get('link');
     },
     getPostInfo() {
       this.$http
