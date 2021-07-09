@@ -14,15 +14,13 @@ export default {
   mounted() {
     this.img= this.imageName;
     this.getImage(this.img);
-    if(this.oneTime){
-      this.seeAdvertisements();
-    }
+    this.seeAdvertisements();
   },
-  props: ['imageName', 'id', 'user', 'profileImg', 'clickable', 'campaignId', 'oneTime', 'influencerUsername'],
+  props: ['imageName', 'id', 'user', 'profileImg', 'clickable', 'campaignId', 'oneTime', 'influencerUsername', 'link'],
   data() {
     return {
       media: {mediatype: '', url: ''},
-      img:undefined
+      img:undefined,
     }
   },
   watch: {
@@ -36,7 +34,7 @@ export default {
     seeAdvertisements(){
       if(this.campaignId)
       this.$http
-          .put(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/onetime/see/' + this.campaignId)
+          .put(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/see/' + this.campaignId + '/' + this.influencerUsername)
           .then(response => {
             console.log(response)
           })
@@ -70,6 +68,17 @@ export default {
       this.getBase64();
     },
     openLink(){
+      if(this.campaignId!==undefined){
+        this.$http
+            .put(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/click/' + this.campaignId + '/' + this.influencerUsername)
+            .then(response => {
+              console.log(response)
+              window.location.href=this.link + '&username=' + this.influencerUsername + '&content=' + this.id;
+            })
+            .catch(err => (console.log(err)));
+      }
+    },
+    getCampaign(){
 
     },
     openPost: function () {
@@ -87,13 +96,12 @@ export default {
       }
     },
     getUserInfo() {
-      //TODO: go to address and make click event
     }
   },
   computed:{
     campaignUrlPart(){
-      if(this.campaignId!==undefined){
-        return '&campaignId=' + this.campaignId;
+      if(this.campaignId!==undefined && this.influencerUsername!==undefined){
+        return '&campaignId=' + this.campaignId + '&influencerUsername=' + this.influencerUsername ;
       }
       return ''
     }

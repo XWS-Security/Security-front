@@ -57,7 +57,7 @@
               <button v-if="user === 'Administrator'" class="btn btn-danger mr-2">Remove User</button>
               <img v-if="s.mediatype==='image/jpeg'" class="item" v-bind:src="s.url"/>
               <video controls v-else class="item" v-bind:src="s.url" autoplay loop v-bind:muted="index!=selected"/>
-              <b-button variant="info" block>Visit addvertisement</b-button>
+              <b-button variant="info" block @click="goToLink(s.link, s.campaignId)">Visit advertisement</b-button>
             </b-carousel-slide>
             <b-carousel-slide v-for="(s, index) in storiesWithImages" v-bind:key="index" img-blank
                               img-alt="Blank image">
@@ -149,6 +149,16 @@ export default {
     this.getAdds();
   },
   methods: {
+    goToLink(link, campaignId){
+          this.$http
+          .put(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/click/' + campaignId + '/' + this.username)
+          .then(response => {
+            window.location.href= link;
+            console.log(response)
+          })
+          .catch(err => (console.log(err)));
+
+    },
     getAdds(){
       this.getAgentsOneTimeAds();
       this.getAgentsContinuousAds();
@@ -177,21 +187,20 @@ export default {
       )
     },
     getAddImage(storyParam, campaignId, link){
-
           this.$http
               .get(process.env.VUE_APP_CONTENT_URL + 'image/' + storyParam.path, {
                 responseType: 'arraybuffer'
               })
               .then(response => {
                 let type = response.headers['content-type'];
-                let story = {url: _arrayBufferToBase64(response.data, type), mediatype: type, story: storyParam, campaignId:campaignId, link:link};
+                let story = {url: _arrayBufferToBase64(response.data, type), mediatype: type, story: storyParam, campaignId:campaignId, link:link + '&username=' + this.username + '&content=' + storyParam.id};
                 this.advertStoriesWithImages.push(story)
               });
     },
     seeAdvertisements(campaigns){
       campaigns.forEach(campaign=>{
         this.$http
-            .put(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/onetime/see/' + campaign.campaignId)
+            .put(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/see/' + campaign.campaignId + '/' + this.username)
             .then(response => {
               console.log(response)
             })
@@ -222,6 +231,7 @@ export default {
       this.$http
           .get(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/story/continuous/influencer/' + this.username)
           .then(response => {
+            this.seeAdvertisements(response.data);
             this.addListOfAdds(response.data);
           })
     },
@@ -229,6 +239,7 @@ export default {
       this.$http
           .get(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/story/continuous/' + this.username)
           .then(response => {
+            this.seeAdvertisements(response.data);
             this.addListOfAdds(response.data);
           })
     },

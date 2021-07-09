@@ -40,9 +40,7 @@ export default {
   mounted() {
     this.id = this.contentId
     this.getAgentInfo();
-    if(this.oneTime){
-      this.seeAdvertisements();
-    }
+    this.seeAdvertisements();
   },
   methods: {
     getAgentInfo(){
@@ -54,7 +52,7 @@ export default {
     },
     seeAdvertisements(){
       this.$http
-          .put(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/onetime/see/' + this.campaignId)
+          .put(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/see/' + this.campaignId + '/' + this.agentAccountUsername)
           .then(response => {
             console.log(response)
           })
@@ -64,8 +62,13 @@ export default {
       this.$router.push("/post?id=" + this.contentId + '&username=' + this.username + '&profileImg=' + this.profile.profilePictureName);
     },
     goToLink(){
-      //TODO: make absolute path, and click event
-      window.location.href=this.advertisementLink;
+      this.$http
+          .put(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/click/' + this.campaignId + '/' + this.agentAccountUsername)
+          .then(response => {
+            console.log(response)
+            window.location.href=this.advertisementLink + '&username=' + this.agentAccountUsername + '&content=' + this.contentId;
+          })
+          .catch(err => (console.log(err)));
     }
   }
 }

@@ -36,6 +36,7 @@
                   v-bind:one-time=true
                   v-bind:user="a.agentAccountUsername"
                   v-bind:campaign-id="a.campaignId"
+                  v-bind:link="a.link"
                   v-bind:influencer-username="id"
                   clickable="true"></post-image>
     </div>
@@ -45,6 +46,7 @@
                   v-bind:one-time=false
                   v-bind:user="a.agentAccountUsername"
                   v-bind:campaign-id="a.campaignId"
+                  v-bind:link="a.link"
                   v-bind:influencer-username="id"
                   clickable="true"></post-image>
     </div>
@@ -53,7 +55,9 @@
                   v-bind:id="a.contentId"
                   v-bind:user="id"
                   v-bind:one-time=true
+                  v-bind:influencer-username="id"
                   v-bind:campaign-id="a.campaignId"
+                  v-bind:link="a.link"
                   v-bind:profile-img="user.profilePictureName"
                   clickable="true"></post-image>
     </div>
@@ -61,8 +65,10 @@
       <post-image v-for="a in continuous" :key="a.campaignId"
                   v-bind:id="a.contentId"
                   v-bind:user="id"
+                  v-bind:influencer-username="id"
                   v-bind:one-time=false
                   v-bind:campaign-id="a.campaignId"
+                  v-bind:link="a.link"
                   v-bind:profile-img="user.profilePictureName"
                   clickable="true"></post-image>
     </div>
