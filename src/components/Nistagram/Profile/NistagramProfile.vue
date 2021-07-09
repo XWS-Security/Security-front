@@ -31,6 +31,24 @@
     </div>
     <hr>
     <div class="d-flex align-content-around  justify-content-center flex-wrap light_blue" v-if="hasViewAccess">
+      <post-image v-for="a in influencerAddsOneTime" :key="a.campaignId"
+                  v-bind:id="a.contentId"
+                  v-bind:one-time=true
+                  v-bind:user="a.agentAccountUsername"
+                  v-bind:campaign-id="a.campaignId"
+                  v-bind:influencer-username="id"
+                  clickable="true"></post-image>
+    </div>
+    <div class="d-flex align-content-around  justify-content-center flex-wrap light_blue" v-if="hasViewAccess">
+      <post-image v-for="a in influencerAddsContinuous" :key="a.campaignId"
+                  v-bind:id="a.contentId"
+                  v-bind:one-time=false
+                  v-bind:user="a.agentAccountUsername"
+                  v-bind:campaign-id="a.campaignId"
+                  v-bind:influencer-username="id"
+                  clickable="true"></post-image>
+    </div>
+    <div class="d-flex align-content-around  justify-content-center flex-wrap light_blue" v-if="hasViewAccess">
       <post-image v-for="a in oneTimeAdds" :key="a.campaignId"
                   v-bind:id="a.contentId"
                   v-bind:user="id"
@@ -72,6 +90,8 @@ export default {
     return {
       user: {},
       id: "",
+      influencerAddsContinuous:[],
+      influencerAddsOneTime:[],
       followingStatus: 'NOT_FOLLOWING',
       followersNum: 0,
       followingNum: 0,
@@ -107,6 +127,17 @@ export default {
     getAdds(){
       this.getContinuous();
       this.getOneTime();
+      this.checkIfInfluencer();
+    },
+    checkIfInfluencer(){
+      this.$http
+          .get(process.env.VUE_APP_BACKEND_URL  + 'verification/isInfluencer/' + this.id)
+          .then(response => {
+            if(response.data){
+              this.getInfluencerContinuous();
+              this.getInfluencerOneTime();
+            }
+          })
     },
     getOneTime(){
       this.$http
@@ -121,6 +152,21 @@ export default {
           .get(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/continuous/profile/' + this.id)
           .then(response => {
             this.continuous.push.apply(this.continuous, response.data);
+          })
+    },
+    getInfluencerOneTime(){
+      this.$http
+          .post(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/onetime/influencer', {currentMoment:new Date(), agentAccountUsername:this.id})
+          .then(response => {
+            this.influencerAddsOneTime.push.apply(this.influencerAddsOneTime, response.data);
+            setTimeout(this.getInfluencerOneTime, 60000);
+          })
+    },
+    getInfluencerContinuous(){
+      this.$http
+          .get(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/continuous/influencer/' + this.id)
+          .then(response => {
+            this.influencerAddsContinuous.push.apply(this.influencerAddsContinuous, response.data);
           })
     },
     getFollowingStats() {

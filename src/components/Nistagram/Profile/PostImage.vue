@@ -18,7 +18,7 @@ export default {
       this.seeAdvertisements();
     }
   },
-  props: ['imageName', 'id', 'user', 'profileImg', 'clickable', 'campaignId', 'oneTime'],
+  props: ['imageName', 'id', 'user', 'profileImg', 'clickable', 'campaignId', 'oneTime', 'influencerUsername'],
   data() {
     return {
       media: {mediatype: '', url: ''},
