@@ -40,7 +40,7 @@ export default {
   data() {
     return {
       content: [],
-      advertisements:[],
+      advertisements: [],
       recommended: []
     }
   },
@@ -54,11 +54,11 @@ export default {
     this.getRecommendations();
   },
   methods: {
-    getAdvertisements(){
+    getAdvertisements() {
       this.getContinuousAdvertisements();
       this.getOneTimeAdvertisements();
     },
-    getContinuousAdvertisements(){
+    getContinuousAdvertisements() {
       this.$http
           .get(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/continuous')
           .then(response => {
@@ -66,16 +66,16 @@ export default {
           })
           .catch(err => (console.log(err)));
     },
-    getOneTimeAdvertisements(){
+    getOneTimeAdvertisements() {
       this.$http
-          .post(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/onetime', {currentMoment:new Date()})
+          .post(process.env.VUE_APP_CAMPAIGN_URL + 'advertisement/onetime', {currentMoment: new Date()})
           .then(response => {
             this.advertisements.push.apply(this.advertisements, response.data);
             setTimeout(this.getOneTimeAdvertisements, 60000)
           })
           .catch(err => (console.log(err)));
     },
-    getPosts(){
+    getPosts() {
       this.$http
           .get(process.env.VUE_APP_CONTENT_URL + 'home/')
           .then(response => this.content = response.data)
