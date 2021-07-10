@@ -54,7 +54,7 @@
         </button>
         <button v-if="user === 'Administrator'" class="btn btn-danger mr-2" v-on:click="removeContent">Remove Post
         </button>
-        <button v-if="user === 'Administrator'" class="btn btn-danger mr-2">Remove User</button>
+        <button v-if="user === 'Administrator'" class="btn btn-danger mr-2" v-on:click="removeUser">Remove User</button>
         <hr>
         <div v-if="user === 'NistagramUser'">
           <add-comment v-bind:post-id="id" @commentAdded="getPostInfo"></add-comment>
@@ -196,7 +196,7 @@ export default {
     },
     removeUser() {
       this.$http
-          .put(process.env.VUE_APP_CONTENT_URL + 'profile/remove' + this.id)
+          .put(process.env.VUE_APP_CONTENT_URL + 'profile/remove/' + this.username)
           .then(response => {
             console.log(response.data)
           })
